@@ -8,19 +8,22 @@ class BannerSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = PageController(viewportFraction: 0.8);
+    var controller = PageController(viewportFraction: 0.85);
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
         SizedBox(
-          height: 200,
+          height: 180,
           child: PageView.builder(
             controller: controller,
             itemCount: 3,
             itemBuilder: (context, index) {
               return Container(
-                margin: const EdgeInsets.only(left: 12, right: 12),
-                color: Colors.amber,
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.circular(15),
+                ),
               );
             },
           ),
