@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../widgets/banner_slider.dart';
+import '../widgets/category_icon_item_chip.dart';
 import '../widgets/product_item.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -208,56 +209,10 @@ class HomeScreen extends StatelessWidget {
             padding: index == 0
                 ? const EdgeInsets.only(left: 10, right: 40)
                 : const EdgeInsets.symmetric(horizontal: 10),
-            child: const CategoryHorizontalListItem(),
+            child: const CategoryItemChip(),
           );
         },
       ),
-    );
-  }
-}
-
-class CategoryHorizontalListItem extends StatelessWidget {
-  const CategoryHorizontalListItem({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: 56,
-          width: 56,
-          decoration: ShapeDecoration(
-            shadows: const [
-              BoxShadow(
-                color: Colors.amber,
-                blurRadius: 25,
-                spreadRadius: -12,
-                offset: Offset(0, 15),
-              )
-            ],
-            color: Colors.amber,
-            shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.circular(40),
-            ),
-          ),
-          child: const Icon(
-            Icons.mouse,
-            size: 32,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          'همه',
-          style: TextStyle(
-            fontFamily: 'SB',
-            fontSize: 12,
-          ),
-        ),
-      ],
     );
   }
 }
