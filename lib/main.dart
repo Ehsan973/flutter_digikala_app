@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/screens/category_screen.dart';
@@ -19,9 +20,105 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ProductListScreen(),
+      home: Scaffold(
+        backgroundColor: CustomColors.backgroundScreenColor,
+        appBar: AppBar(),
+        bottomNavigationBar: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: const Image(
+                      image: AssetImage(
+                        'assets/images/icon_home.png',
+                      ),
+                    ),
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: const Image(
+                      image: AssetImage(
+                        'assets/images/icon_home.png',
+                      ),
+                    ),
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: const Image(
+                      image: AssetImage(
+                        'assets/images/icon_home.png',
+                      ),
+                    ),
+                  ),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Container(
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColors.blue,
+                          blurRadius: 20,
+                          spreadRadius: -7,
+                          offset: Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: const Image(
+                      image: AssetImage(
+                        'assets/images/icon_home.png',
+                      ),
+                    ),
+                  ),
+                  label: 'Home',
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: ProductListScreen(),
+      ),
     );
   }
 }

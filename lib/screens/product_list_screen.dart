@@ -58,7 +58,7 @@ class ProductListScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   childAspectRatio: 2 / 2.7,
                   mainAxisSpacing: 20,
-                  crossAxisSpacing: 10,
+                  crossAxisSpacing: 15,
                 ),
               ),
             ),
