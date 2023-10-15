@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/screens/category_screen.dart';
 import 'package:digikala_app/screens/home_screen.dart';
+import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:digikala_app/screens/product_list_screen.dart';
 import 'package:digikala_app/screens/profile_screen.dart';
 import 'package:digikala_app/widgets/banner_slider.dart';
@@ -167,11 +168,15 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: IndexedStack(
-          index: _selectedBottomNavigationItem,
-          children: _getScreens(),
-        ),
+        body: ProductDetailScreen(),
       ),
+    );
+  }
+
+  IndexedStack _getBody() {
+    return IndexedStack(
+      index: _selectedBottomNavigationItem,
+      children: _getScreens(),
     );
   }
 
