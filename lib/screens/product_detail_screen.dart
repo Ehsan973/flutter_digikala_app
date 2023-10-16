@@ -52,7 +52,7 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             const SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 8),
                 child: Text(
                   ' Se 2022 آیفون',
                   textAlign: TextAlign.center,
@@ -67,7 +67,8 @@ class ProductDetailScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Container(
                 height: 284,
-                margin: const EdgeInsets.symmetric(horizontal: 32),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -138,6 +139,163 @@ class ProductDetailScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     )
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'انتخاب رنگ',
+                      style: TextStyle(
+                        fontFamily: 'SM',
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          height: 26,
+                          width: 26,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 26,
+                          width: 26,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 26,
+                          width: 26,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'انتخاب حافظه داخلی',
+                      style: TextStyle(
+                        fontFamily: 'SM',
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          height: 25,
+                          margin: const EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '512',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SB',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          margin: const EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '256',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SB',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 25,
+                          margin: const EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              '128',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'SB',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
