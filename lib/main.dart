@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:digikala_app/constants/colors.dart';
+import 'package:digikala_app/screens/cart_screen.dart';
 import 'package:digikala_app/screens/category_screen.dart';
 import 'package:digikala_app/screens/home_screen.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
@@ -168,7 +169,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: ProductDetailScreen(),
+        body: _getBody(),
       ),
     );
   }
@@ -183,8 +184,8 @@ class _MyAppState extends State<MyApp> {
   List<Widget> _getScreens() {
     return const <Widget>[
       ProfileScreen(),
+      CartScreen(),
       CategoryScreen(),
-      ProductListScreen(),
       HomeScreen(),
     ];
   }
