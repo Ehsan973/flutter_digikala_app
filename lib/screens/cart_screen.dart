@@ -52,11 +52,12 @@ class CartScreen extends StatelessWidget {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => CartItem(),
+                    (context, index) => const CartItem(),
                     childCount: 5,
                   ),
                 ),
-                SliverPadding(padding: EdgeInsets.symmetric(vertical: 32)),
+                const SliverPadding(
+                    padding: EdgeInsets.symmetric(vertical: 32)),
               ],
             ),
             Padding(
@@ -68,11 +69,11 @@ class CartScreen extends StatelessWidget {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.green,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'ادامه فرآیند خرید',
                     style: TextStyle(
                       fontSize: 18,
@@ -112,12 +113,13 @@ class CartItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text('data'),
-                        Text('data'),
+                        const Text('data'),
+                        const Text('data'),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -140,32 +142,32 @@ class CartItem extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text('تومان'),
-                            Text(
+                            const Text('تومان'),
+                            const Text(
                               '123456000',
                               style: TextStyle(fontFamily: 'SM'),
                             ),
                           ],
                         ),
-                        OptionChip(),
-                        OptionChip(),
-                        OptionChip(),
+                        const OptionChip(),
+                        const OptionChip(),
+                        const OptionChip(),
                       ],
                     ),
                   ),
                 ),
-                Image(image: AssetImage('assets/images/iphone.png')),
+                const Image(image: AssetImage('assets/images/iphone.png')),
               ],
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Divider(
               indent: 12,
               endIndent: 12,
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -195,12 +197,12 @@ class OptionChip extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: CustomColors.grey),
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2),
+      child: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

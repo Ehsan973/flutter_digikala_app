@@ -2,6 +2,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:digikala_app/constants/colors.dart';
+import 'package:digikala_app/data/datasource/authentication_datasource.dart';
+import 'package:digikala_app/data/repository/authentication_repository.dart';
+import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/cart_screen.dart';
 import 'package:digikala_app/screens/category_screen.dart';
 import 'package:digikala_app/screens/home_screen.dart';
@@ -13,7 +16,8 @@ import 'package:digikala_app/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-void main() {
+void main() async {
+  await getItInit();
   runApp(const MyApp());
 }
 
@@ -169,12 +173,28 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: _getBody(),
+        body: SafeArea(
+          child: Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                // var either = await AuthenticationRepository()
+                //     .register('Ehsan3', '12345678', '12345678');
+                var either =
+                    await AuthenticationRepository().login('Ehsan', '12345678');
+                either.fold(
+                  (errorMessage) => print(errorMessage),
+                  (successMessage) => print(successMessage),
+                );
+              },
+              child: Text('Click to register'),
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  IndexedStack _getBody() {
+  Widget _getBody() {
     return IndexedStack(
       index: _selectedBottomNavigationItem,
       children: _getScreens(),
