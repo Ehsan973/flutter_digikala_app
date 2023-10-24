@@ -8,15 +8,19 @@ import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/cart_screen.dart';
 import 'package:digikala_app/screens/category_screen.dart';
 import 'package:digikala_app/screens/home_screen.dart';
+import 'package:digikala_app/screens/login_screen.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:digikala_app/screens/product_list_screen.dart';
 import 'package:digikala_app/screens/profile_screen.dart';
+import 'package:digikala_app/util/auth_manager.dart';
 import 'package:digikala_app/widgets/banner_slider.dart';
 import 'package:digikala_app/widgets/product_item.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await getItInit();
   runApp(const MyApp());
 }
@@ -174,21 +178,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         body: SafeArea(
-          child: Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                // var either = await AuthenticationRepository()
-                //     .register('Ehsan3', '12345678', '12345678');
-                var either =
-                    await AuthenticationRepository().login('Ehsan', '12345678');
-                either.fold(
-                  (errorMessage) => print(errorMessage),
-                  (successMessage) => print(successMessage),
-                );
-              },
-              child: Text('Click to register'),
-            ),
-          ),
+          child: LoginScreen(),
         ),
       ),
     );
