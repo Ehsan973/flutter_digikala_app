@@ -1,5 +1,9 @@
+import 'package:digikala_app/authentication/auth_bloc.dart';
+import 'package:digikala_app/authentication/auth_event.dart';
+import 'package:digikala_app/authentication/auth_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -113,21 +117,48 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        textStyle: const TextStyle(
-                          fontFamily: 'SB',
-                          fontSize: 18,
-                        ),
-                        minimumSize: const Size(250, 48),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                      ),
-                      child: const Text('ورود به حساب کاربری'),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is AuthInitialState) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              var username = _usernameTextController.text;
+                              var password = _passwordTextController.text;
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(AuthLoginRequest(username, password));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              textStyle: const TextStyle(
+                                fontFamily: 'SB',
+                                fontSize: 18,
+                              ),
+                              minimumSize: const Size(250, 48),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                            ),
+                            child: const Text('ورود به حساب کاربری'),
+                          );
+                        } else if (state is AuthLoadingState) {
+                          return const CircularProgressIndicator();
+                        } else if (state is AuthResponseState) {
+                          var widget = Text('');
+                          state.response.fold(
+                            (l) {
+                              widget = Text(l);
+                            },
+                            (r) {
+                              widget = Text(r);
+                            },
+                          );
+
+                          return widget;
+                        }
+
+                        return Text('خطای نا مشخص');
+                      },
                     ),
                   ],
                 ),
