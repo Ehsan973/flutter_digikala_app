@@ -179,11 +179,18 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        body: BlocProvider(
-          create: (context) => AuthBloc(),
-          child: LoginScreen(),
+        body: IndexedStack(
+          index: _selectedBottomNavigationItem,
+          children: _getScreens(),
         ),
       ),
+    );
+  }
+
+  Widget _getBlocProviderLoginScreen() {
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: LoginScreen(),
     );
   }
 
