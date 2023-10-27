@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:digikala_app/authentication/auth_bloc.dart';
+import 'package:digikala_app/category/category_bloc.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/datasource/authentication_datasource.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
@@ -202,10 +203,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<Widget> _getScreens() {
-    return const <Widget>[
+    return <Widget>[
       ProfileScreen(),
       CartScreen(),
-      CategoryScreen(),
+      BlocProvider(
+        create: (context) => CategoryBloc(),
+        child: CategoryScreen(),
+      ),
       HomeScreen(),
     ];
   }
