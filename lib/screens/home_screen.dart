@@ -1,3 +1,5 @@
+import 'package:digikala_app/data/repository/banner_repository.dart';
+import 'package:digikala_app/di/di.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -16,6 +18,19 @@ class HomeScreen extends StatelessWidget {
         child: Center(
           child: CustomScrollView(
             slivers: [
+              SliverToBoxAdapter(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    IBannerRepository repository = locator.get();
+                    var either = await repository.getBanners();
+                    either.fold(
+                      (l) => print(l),
+                      (r) => print(r),
+                    );
+                  },
+                  child: const Text('get banners'),
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Container(
                   width: double.infinity,
@@ -150,27 +165,29 @@ class HomeScreen extends StatelessWidget {
                     horizontal: 20,
                     vertical: 20,
                   ),
-                  child: Row(children: [
-                    Image(
-                        image:
-                            AssetImage('assets/images/icon_left_categroy.png')),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'مشاهده همه',
-                      style: TextStyle(
-                        fontFamily: 'SB',
-                        color: CustomColors.blue,
+                  child: Row(
+                    children: [
+                      Image(
+                          image: AssetImage(
+                              'assets/images/icon_left_categroy.png')),
+                      SizedBox(
+                        width: 5,
                       ),
-                    ),
-                    Spacer(),
-                    Text(
-                      'پربازدید ترین ها',
-                      style:
-                          TextStyle(fontFamily: 'SB', color: CustomColors.grey),
-                    ),
-                  ]),
+                      Text(
+                        'مشاهده همه',
+                        style: TextStyle(
+                          fontFamily: 'SB',
+                          color: CustomColors.blue,
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        'پربازدید ترین ها',
+                        style: TextStyle(
+                            fontFamily: 'SB', color: CustomColors.grey),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SliverToBoxAdapter(

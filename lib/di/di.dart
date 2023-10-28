@@ -1,6 +1,8 @@
 import 'package:digikala_app/data/datasource/authentication_datasource.dart';
+import 'package:digikala_app/data/datasource/banner_datasource.dart';
 import 'package:digikala_app/data/datasource/category_datasource.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
+import 'package:digikala_app/data/repository/banner_repository.dart';
 import 'package:digikala_app/data/repository/category_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -18,10 +20,12 @@ Future<void> getItInit() async {
       .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
   locator
       .registerFactory<ICatergoryDatasource>(() => CategoryRemoteDatesource());
+  locator.registerFactory<IBannerDatasource>(() => BannerRemoteDatasource());
 
   //repositories
   locator.registerFactory<IAuthRepository>(() => AuthenticationRepository());
   locator.registerFactory<ICatergoryRepository>(() => CategoryRepository());
+  locator.registerFactory<IBannerRepository>(() => BannerRepository());
 
   locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
