@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:digikala_app/authentication/auth_event.dart';
-import 'package:digikala_app/authentication/auth_state.dart';
+import 'package:digikala_app/bloc/authentication/auth_event.dart';
+import 'package:digikala_app/bloc/authentication/auth_state.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
 import 'package:digikala_app/di/di.dart';
 

@@ -1,6 +1,6 @@
-import 'package:digikala_app/category/category_bloc.dart';
-import 'package:digikala_app/category/category_event.dart';
-import 'package:digikala_app/category/category_state.dart';
+import 'package:digikala_app/bloc/category/category_bloc.dart';
+import 'package:digikala_app/bloc/category/category_event.dart';
+import 'package:digikala_app/bloc/category/category_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/repository/category_repository.dart';

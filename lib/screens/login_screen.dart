@@ -1,6 +1,6 @@
-import 'package:digikala_app/authentication/auth_bloc.dart';
-import 'package:digikala_app/authentication/auth_event.dart';
-import 'package:digikala_app/authentication/auth_state.dart';
+import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
+import 'package:digikala_app/bloc/authentication/auth_event.dart';
+import 'package:digikala_app/bloc/authentication/auth_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

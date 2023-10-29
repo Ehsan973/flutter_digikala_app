@@ -5,17 +5,17 @@ import 'package:dio/dio.dart';
 import '../model/banner.dart';
 
 abstract class IBannerDatasource {
-  Future<List<Banner>> getBanners();
+  Future<List<BannerHome>> getBanners();
 }
 
 class BannerRemoteDatasource extends IBannerDatasource {
   final Dio _dio = locator.get();
   @override
-  Future<List<Banner>> getBanners() async {
+  Future<List<BannerHome>> getBanners() async {
     try {
       var response = await _dio.get('collections/category/records');
       return response.data['items']
-          .map<Banner>((jsonObject) => Banner.fromJson(jsonObject))
+          .map<BannerHome>((jsonObject) => BannerHome.fromJson(jsonObject))
           .toList();
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);

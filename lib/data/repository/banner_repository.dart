@@ -5,13 +5,13 @@ import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/util/api_exeption.dart';
 
 abstract class IBannerRepository {
-  Future<Either<String, List<Banner>>> getBanners();
+  Future<Either<String, List<BannerHome>>> getBanners();
 }
 
 class BannerRepository extends IBannerRepository {
   final IBannerDatasource _datasource = locator.get();
   @override
-  Future<Either<String, List<Banner>>> getBanners() async {
+  Future<Either<String, List<BannerHome>>> getBanners() async {
     try {
       var response = await _datasource.getBanners();
       return right(response);

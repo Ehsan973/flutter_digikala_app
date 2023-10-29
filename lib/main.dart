@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:digikala_app/authentication/auth_bloc.dart';
-import 'package:digikala_app/category/category_bloc.dart';
+import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
+import 'package:digikala_app/bloc/category/category_bloc.dart';
+import 'package:digikala_app/bloc/home/home_bloc.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/datasource/authentication_datasource.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
@@ -210,7 +211,10 @@ class _MyAppState extends State<MyApp> {
         create: (context) => CategoryBloc(),
         child: CategoryScreen(),
       ),
-      HomeScreen(),
+      BlocProvider(
+        create: (context) => HomeBloc(),
+        child: HomeScreen(),
+      )
     ];
   }
 }

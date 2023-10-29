@@ -1,5 +1,5 @@
-import 'package:digikala_app/category/category_event.dart';
-import 'package:digikala_app/category/category_state.dart';
+import 'package:digikala_app/bloc/category/category_event.dart';
+import 'package:digikala_app/bloc/category/category_state.dart';
 import 'package:digikala_app/data/repository/category_repository.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
