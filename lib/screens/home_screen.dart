@@ -1,6 +1,7 @@
 import 'package:digikala_app/bloc/home/home_event.dart';
 import 'package:digikala_app/bloc/home/home_state.dart';
 import 'package:digikala_app/data/model/banner.dart';
+import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/repository/banner_repository.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
                 _getCategoryListTitle(),
-                _getCategoryList(),
+                if (state is HomeRequestSuccessState) ...[
+                  state.categoryEither.fold(
+                    (exceptionMessage) =>
+                        SliverToBoxAdapter(child: Text(exceptionMessage)),
+                    (categoryList) => _getCategoryList(categoryList),
+                  ),
+                ],
                 _getBestSellerTitle(),
                 _getBestSellerProduct(),
                 const SliverToBoxAdapter(
@@ -187,44 +194,52 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverToBoxAdapter _getCategoryList() {
-    return const SliverToBoxAdapter(
+  SliverToBoxAdapter _getCategoryList(List<Category> catergoryList) {
+    return SliverToBoxAdapter(
       child: SizedBox(
         height: 85,
-        child: CategoryList(),
+        child: CategoryList(categoryList: catergoryList,),
       ),
     );
   }
 
   Widget _getBanners(List<BannerHome> bannerList) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: 12,
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 12,
+          ),
+          child: BannerSlider(bannerList),
         ),
-        child: BannerSlider(bannerList),
       ),
     );
   }
 }
 
 class CategoryList extends StatelessWidget {
-  const CategoryList({
+  CategoryList({
     super.key,
+    required this.categoryList,
   });
-
+  List<Category> categoryList;
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        itemCount: categoryList.length,
         itemBuilder: (context, index) {
           return Padding(
             padding: index == 0
                 ? const EdgeInsets.only(left: 10, right: 40)
                 : const EdgeInsets.symmetric(horizontal: 10),
-            child: const CategoryItemChip(),
+            child: CategoryItemChip(
+              category: categoryList[index],
+              
+            ),
           );
         },
       ),

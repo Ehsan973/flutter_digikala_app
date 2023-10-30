@@ -12,17 +12,23 @@ class BannerSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = PageController(viewportFraction: 0.85);
+    var controller = PageController(viewportFraction: 0.9);
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: [
         SizedBox(
-          height: 180,
+          height: 170,
           child: PageView.builder(
             controller: controller,
             itemCount: bannerList.length,
             itemBuilder: (context, index) {
-              return CachedImage(imageUrl: bannerList[index].thumbnail,);
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 8),
+                child: CachedImage(
+                  imageUrl: bannerList[index].thumbnail,
+                  radius: 15,
+                ),
+              );
             },
           ),
         ),
@@ -32,8 +38,8 @@ class BannerSlider extends StatelessWidget {
             controller: controller,
             count: 3,
             effect: const ExpandingDotsEffect(
-              dotHeight: 10,
-              dotWidth: 10,
+              dotHeight: 6,
+              dotWidth: 6,
               expansionFactor: 4,
               dotColor: Colors.white,
               activeDotColor: CustomColors.blueIndicator,

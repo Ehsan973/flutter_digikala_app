@@ -13,7 +13,7 @@ class BannerRemoteDatasource extends IBannerDatasource {
   @override
   Future<List<BannerHome>> getBanners() async {
     try {
-      var response = await _dio.get('collections/category/records');
+      var response = await _dio.get('collections/banner/records');
       return response.data['items']
           .map<BannerHome>((jsonObject) => BannerHome.fromJson(jsonObject))
           .toList();

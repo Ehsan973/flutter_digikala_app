@@ -57,32 +57,32 @@ class ProfileScreen extends StatelessWidget {
                 color: CustomColors.grey,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 20,
-              ),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: Wrap(
-                  spacing: 30,
-                  runSpacing: 20,
-                  children: [
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                    CategoryItemChip(),
-                  ],
-                ),
-              ),
-            ),
+            // const Padding(
+            //   padding: EdgeInsets.symmetric(
+            //     horizontal: 20,
+            //     vertical: 20,
+            //   ),
+            //   child: Directionality(
+            //     textDirection: TextDirection.rtl,
+            //     child: Wrap(
+            //       spacing: 30,
+            //       runSpacing: 20,
+            //       children: [
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //         CategoryItemChip(),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             const Spacer(),
             const Padding(
               padding: EdgeInsets.symmetric(

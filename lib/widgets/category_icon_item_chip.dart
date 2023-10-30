@@ -1,12 +1,17 @@
+import 'package:digikala_app/data/model/category.dart';
+import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItemChip extends StatelessWidget {
-  const CategoryItemChip({
+  CategoryItemChip({
     super.key,
+    required this.category,
   });
+  Category category;
 
   @override
   Widget build(BuildContext context) {
+    int categoryColor = int.parse('ff${category.color}', radix: 16);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -14,29 +19,31 @@ class CategoryItemChip extends StatelessWidget {
           height: 56,
           width: 56,
           decoration: ShapeDecoration(
-            shadows: const [
+            shadows: [
               BoxShadow(
-                color: Colors.amber,
+                color: Color(categoryColor),
                 blurRadius: 25,
                 spreadRadius: -12,
-                offset: Offset(0, 15),
+                offset: const Offset(0, 15),
               )
             ],
-            color: Colors.amber,
+            color: Color(categoryColor),
             shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.circular(40),
             ),
           ),
-          child: const Icon(
-            Icons.mouse,
-            size: 32,
-            color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: CachedImage(
+              imageUrl: category.icon,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         const SizedBox(height: 10),
-        const Text(
-          'همه',
-          style: TextStyle(
+        Text(
+          category.title ?? 'محصول',
+          style: const TextStyle(
             fontFamily: 'SB',
             fontSize: 12,
           ),
