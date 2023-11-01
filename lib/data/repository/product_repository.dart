@@ -14,6 +14,7 @@ class ProductRepository extends IProductRepository {
   Future<Either<String, List<Product>>> getProducts() async {
     try {
       var response = await _datasource.getProducts();
+      print(response);
       return right(response);
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطا محتوای متنی ندارد');

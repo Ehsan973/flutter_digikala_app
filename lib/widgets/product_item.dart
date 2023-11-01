@@ -1,10 +1,14 @@
+import 'package:digikala_app/data/model/product.dart';
+import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({
+  Product product;
+  ProductItem({
     super.key,
+    required this.product,
   });
 
   @override
@@ -25,7 +29,15 @@ class ProductItem extends StatelessWidget {
           ),
           Stack(
             children: [
-              Center(child: Image.asset('assets/images/iphone.png')),
+              Center(
+                child: SizedBox(
+                  height: 98,
+                  width: 98,
+                  child: CachedImage(
+                    imageUrl: product.thumbnail,
+                  ),
+                ),
+              ),
               Positioned(
                 right: 10,
                 top: 0,
@@ -44,11 +56,12 @@ class ProductItem extends StatelessWidget {
                     color: Colors.red,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6.0, vertical: 2),
                     child: Text(
-                      '%3',
-                      style: TextStyle(
+                      '%${product.percent!.round().toString()}',
+                      style: const TextStyle(
                         fontFamily: 'SB',
                         fontSize: 12,
                         color: Colors.white,
@@ -61,16 +74,18 @@ class ProductItem extends StatelessWidget {
           ),
           const Spacer(),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(
+              Padding(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 10,
                 ),
                 child: Text(
-                  'آیفون 13 پرو مکس',
-                  style: TextStyle(
+                  product.name,
+                  overflow: TextOverflow.ellipsis,
+                  textDirection: TextDirection.rtl,
+                  style: const TextStyle(
                     fontFamily: 'SM',
                     fontSize: 14,
                   ),
@@ -93,19 +108,19 @@ class ProductItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
+                      const Text(
                         'تومان',
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'SM',
                             fontSize: 12),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Column(
@@ -113,8 +128,8 @@ class ProductItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '423535000',
-                            style: TextStyle(
+                            product.price.toString(),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
                               fontFamily: 'SM',
@@ -122,8 +137,8 @@ class ProductItem extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '324000000',
-                            style: TextStyle(
+                            '${product.price + product.discountPrice}',
+                            style: const TextStyle(
                               color: Colors.white,
                               fontFamily: 'SM',
                               fontSize: 16,
@@ -131,8 +146,8 @@ class ProductItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(),
-                      Image(
+                      const Spacer(),
+                      const Image(
                         width: 24,
                         image: AssetImage(
                           'assets/images/icon_right_arrow_cricle.png',

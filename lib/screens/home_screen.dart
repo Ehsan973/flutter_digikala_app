@@ -2,6 +2,7 @@ import 'package:digikala_app/bloc/home/home_event.dart';
 import 'package:digikala_app/bloc/home/home_state.dart';
 import 'package:digikala_app/data/model/banner.dart';
 import 'package:digikala_app/data/model/category.dart';
+import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/data/repository/banner_repository.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
                 _getBestSellerTitle(),
-                _getBestSellerProduct(),
+                if (state is HomeRequestSuccessState) ...[
+                  state.productEither.fold(
+                    (exceptionMesssage) =>
+                        SliverToBoxAdapter(child: Text(exceptionMesssage)),
+                    (productList) => _getBestSellerProduct(productList),
+                  ),
+                ],
                 const SliverToBoxAdapter(
                   child: SizedBox(
                     height: 12,
@@ -87,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: index == 0
                     ? const EdgeInsets.only(left: 10, right: 40)
                     : const EdgeInsets.symmetric(horizontal: 10),
-                child: const ProductItem(),
+                child: const Text(''),
               );
             },
           ),
@@ -127,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverToBoxAdapter _getBestSellerProduct() {
+  Widget _getBestSellerProduct(List<Product> productList) {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 210,
@@ -135,12 +142,15 @@ class _HomeScreenState extends State<HomeScreen> {
           textDirection: TextDirection.rtl,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            itemCount: productList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: index == 0
                     ? const EdgeInsets.only(left: 10, right: 40)
                     : const EdgeInsets.symmetric(horizontal: 10),
-                child: const ProductItem(),
+                child: ProductItem(
+                  product: productList[index],
+                ),
               );
             },
           ),
@@ -198,7 +208,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 85,
-        child: CategoryList(categoryList: catergoryList,),
+        child: CategoryList(
+          categoryList: catergoryList,
+        ),
       ),
     );
   }
@@ -238,7 +250,6 @@ class CategoryList extends StatelessWidget {
                 : const EdgeInsets.symmetric(horizontal: 10),
             child: CategoryItemChip(
               category: categoryList[index],
-              
             ),
           );
         },

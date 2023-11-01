@@ -13,6 +13,7 @@ class ProductRemoteDatasource extends IProductDatasource {
   Future<List<Product>> getProducts() async {
     try {
       var response = await _dio.get('collections/products/records');
+      print(response.data['items']);
       return response.data['items']
           .map<Product>((jsonObject) => Product.fromJson(jsonObject))
           .toList();
