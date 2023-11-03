@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
                 _getBestSellerTitle(),
                 if (state is HomeRequestSuccessState) ...[
-                  state.productEither.fold(
+                  state.bestSellerProductEither.fold(
                     (exceptionMesssage) =>
                         SliverToBoxAdapter(child: Text(exceptionMesssage)),
                     (productList) => _getBestSellerProduct(productList),
@@ -72,7 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 _getMostViewedTitle(),
-                _getMostViewedProduct(),
+                if (state is HomeRequestSuccessState) ...[
+                  state.hottestProductEither.fold(
+                    (errorMessage) =>
+                        SliverToBoxAdapter(child: Text(errorMessage)),
+                    (productList) {
+                      return _getMostViewedProduct(productList);
+                    },
+                  )
+                ],
               ],
             );
           },
@@ -81,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverToBoxAdapter _getMostViewedProduct() {
+  SliverToBoxAdapter _getMostViewedProduct(List<Product> productList) {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 210,
@@ -89,12 +97,13 @@ class _HomeScreenState extends State<HomeScreen> {
           textDirection: TextDirection.rtl,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            itemCount: productList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: index == 0
                     ? const EdgeInsets.only(left: 10, right: 40)
                     : const EdgeInsets.symmetric(horizontal: 10),
-                child: const Text(''),
+                child: ProductItem(product: productList[index]),
               );
             },
           ),
