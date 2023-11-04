@@ -39,48 +39,49 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: [
                 if (state is HomeLoadingState) ...[
                   const SliverToBoxAdapter(child: CircularProgressIndicator())
-                ],
-                const SearchBox(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.bannerEither.fold(
-                    (exceptionMessage) =>
-                        SliverToBoxAdapter(child: Text(exceptionMessage)),
-                    (listBanners) {
-                      return _getBanners(listBanners);
-                    },
+                ] else ...{
+                  const SearchBox(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.bannerEither.fold(
+                      (exceptionMessage) =>
+                          SliverToBoxAdapter(child: Text(exceptionMessage)),
+                      (listBanners) {
+                        return _getBanners(listBanners);
+                      },
+                    ),
+                  ],
+                  _getCategoryListTitle(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.categoryEither.fold(
+                      (exceptionMessage) =>
+                          SliverToBoxAdapter(child: Text(exceptionMessage)),
+                      (categoryList) => _getCategoryList(categoryList),
+                    ),
+                  ],
+                  _getBestSellerTitle(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.bestSellerProductEither.fold(
+                      (exceptionMesssage) =>
+                          SliverToBoxAdapter(child: Text(exceptionMesssage)),
+                      (productList) => _getBestSellerProduct(productList),
+                    ),
+                  ],
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 12,
+                    ),
                   ),
-                ],
-                _getCategoryListTitle(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.categoryEither.fold(
-                    (exceptionMessage) =>
-                        SliverToBoxAdapter(child: Text(exceptionMessage)),
-                    (categoryList) => _getCategoryList(categoryList),
-                  ),
-                ],
-                _getBestSellerTitle(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.bestSellerProductEither.fold(
-                    (exceptionMesssage) =>
-                        SliverToBoxAdapter(child: Text(exceptionMesssage)),
-                    (productList) => _getBestSellerProduct(productList),
-                  ),
-                ],
-                const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 12,
-                  ),
-                ),
-                _getMostViewedTitle(),
-                if (state is HomeRequestSuccessState) ...[
-                  state.hottestProductEither.fold(
-                    (errorMessage) =>
-                        SliverToBoxAdapter(child: Text(errorMessage)),
-                    (productList) {
-                      return _getMostViewedProduct(productList);
-                    },
-                  )
-                ],
+                  _getMostViewedTitle(),
+                  if (state is HomeRequestSuccessState) ...[
+                    state.hottestProductEither.fold(
+                      (errorMessage) =>
+                          SliverToBoxAdapter(child: Text(errorMessage)),
+                      (productList) {
+                        return _getMostViewedProduct(productList);
+                      },
+                    )
+                  ],
+                },
               ],
             );
           },

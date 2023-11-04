@@ -1,12 +1,15 @@
 import 'dart:ui';
 
+import 'package:digikala_app/data/model/product.dart';
+import 'package:digikala_app/data/repository/product_detail_repository.dart';
+import 'package:digikala_app/di/di.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
-
+  ProductDetailScreen({super.key, required this.product});
+  Product product;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -593,26 +596,37 @@ class AddToBasketButton extends StatelessWidget {
             ),
           ),
         ),
-        ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              height: 53,
-              width: 160,
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
+        GestureDetector(
+          onTap: () async {
+            IDetailProductRepository repository = locator.get();
+            var response = await repository.getProductImage();
+            response.fold((l) {}, (r) {
+              r.forEach((element) {
+                print(element.imageUrl);
+              });
+            });
+          },
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                height: 53,
+                width: 160,
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
                 ),
-              ),
-              child: const Center(
-                child: Text(
-                  'افزودن به سبد خرید',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'SB',
+                child: const Center(
+                  child: Text(
+                    'افزودن به سبد خرید',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'SB',
+                    ),
                   ),
                 ),
               ),
