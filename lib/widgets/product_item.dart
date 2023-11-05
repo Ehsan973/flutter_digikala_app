@@ -1,7 +1,9 @@
+import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/colors.dart';
 
@@ -18,8 +20,11 @@ class ProductItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(
-              product: product,
+            builder: (context) => BlocProvider(
+              create: (context) => ProductBloc(),
+              child: ProductDetailScreen(
+                product: product,
+              ),
             ),
           ),
         );
