@@ -103,7 +103,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
                 if (state is ProductResponseState) ...[
-                  state.productImage.fold(
+                  state.productImageEither.fold(
                     (errorMessage) =>
                         SliverToBoxAdapter(child: Text(errorMessage)),
                     (productImageList) {
@@ -112,14 +112,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   )
                 ],
                 if (state is ProductResponseState) ...[
-                  state.variantTypes.fold(
+                  state.productVariantEither.fold(
                     (l) => SliverToBoxAdapter(
                       child: Text(l),
                     ),
                     (variantList) {
-                      return ColorVariant(
-                        variantType: variantList.first,
-                      );
+                      for (var variant in variantList) {
+                        print(variant.variantType.title);
+                        for (var options in variant.variantList) {
+                          print(options.name);
+                        }
+                      }
+                      return SliverToBoxAdapter(child: Text('asfse'));
                     },
                   ),
                 ],
