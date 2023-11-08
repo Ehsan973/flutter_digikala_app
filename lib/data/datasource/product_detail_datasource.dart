@@ -59,7 +59,10 @@ class DetailProductRemoteDatasource extends IDetailProductDatasource {
       Map<String, String> qParams = {
         'filter': 'product_id="0tc0e5ju89x5ogj"',
       };
-      var response = await _dio.get('collections/variants/records');
+      var response = await _dio.get(
+        'collections/variants/records',
+        queryParameters: qParams,
+      );
       return response.data['items']
           .map<Variant>((jsonObject) => Variant.fromJson(jsonObject))
           .toList();
