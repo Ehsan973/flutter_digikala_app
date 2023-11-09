@@ -119,112 +119,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Text(l),
                     ),
                     (productVariantList) {
-                      return VariantContainer(
+                      return VariantContainerGenerator(
                           productVariantList: productVariantList);
                     },
                   ),
                 ],
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'انتخاب حافظه داخلی',
-                          style: TextStyle(
-                            fontFamily: 'SM',
-                            fontSize: 12,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              height: 25,
-                              margin: const EdgeInsets.only(left: 10),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  width: 1,
-                                  color: CustomColors.grey,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  '512',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'SB',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 25,
-                              margin: const EdgeInsets.only(left: 10),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  width: 1,
-                                  color: CustomColors.grey,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  '256',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'SB',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 25,
-                              margin: const EdgeInsets.only(left: 10),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                  width: 1,
-                                  color: CustomColors.grey,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  '128',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'SB',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // _getStorageOptions(),
                 SliverToBoxAdapter(
                   child: Container(
                     height: 46,
@@ -497,24 +397,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
   }
-}
 
-class VariantContainer extends StatelessWidget {
-  List<ProductVariant> productVariantList;
-
-  VariantContainer({super.key, required this.productVariantList});
-
-  @override
-  Widget build(BuildContext context) {
+  SliverToBoxAdapter _getStorageOptions() {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              productVariantList[0].variantType.title!,
-              style: const TextStyle(
+            const Text(
+              'انتخاب حافظه داخلی',
+              style: TextStyle(
                 fontFamily: 'SM',
                 fontSize: 12,
               ),
@@ -525,7 +418,78 @@ class VariantContainer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ..._buildColorVariantOptions(productVariantList[0].variantList),
+                Container(
+                  height: 25,
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      width: 1,
+                      color: CustomColors.grey,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '512',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'SB',
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 25,
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      width: 1,
+                      color: CustomColors.grey,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '256',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'SB',
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 25,
+                  margin: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                    border: Border.all(
+                      width: 1,
+                      color: CustomColors.grey,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '128',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'SB',
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -533,26 +497,59 @@ class VariantContainer extends StatelessWidget {
       ),
     );
   }
+}
 
-  List<Widget> _buildColorVariantOptions(List<Variant> variantList) {
-    List<Widget> colorWidgets = [];
-    for (var colorVariant in variantList) {
-      String hexColor = 'ff${colorVariant.value}';
-      Color itemColor = Color(int.parse(hexColor, radix: 16));
-      var item = Container(
-        height: 26,
-        width: 26,
-        margin: const EdgeInsets.only(left: 10),
-        decoration: BoxDecoration(
-          color: itemColor,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(8),
+class VariantContainerGenerator extends StatelessWidget {
+  List<ProductVariant> productVariantList;
+
+  VariantContainerGenerator({super.key, required this.productVariantList});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          for (var productVariant in productVariantList) ...{
+            if (productVariant.variantList.isNotEmpty) ...{
+              VariantGeneratorChild(productVariant: productVariant)
+            }
+          }
+        ],
+      ),
+    );
+  }
+}
+
+class VariantGeneratorChild extends StatelessWidget {
+  ProductVariant productVariant;
+  VariantGeneratorChild({super.key, required this.productVariant});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            productVariant.variantType.title!,
+            style: const TextStyle(
+              fontFamily: 'SM',
+              fontSize: 12,
+            ),
           ),
-        ),
-      );
-      colorWidgets.add(item);
-    }
-    return colorWidgets;
+          const SizedBox(
+            height: 10,
+          ),
+          if (productVariant.variantType.type == VariantTypeEnum.COLOR) ...{
+            ColorVariantList(variantList: productVariant.variantList),
+          },
+          if (productVariant.variantType.type == VariantTypeEnum.STORAGE) ...{
+            StorageVariantList(storageVariants: productVariant.variantList),
+          }
+        ],
+      ),
+    );
   }
 }
 
@@ -682,37 +679,26 @@ class AddToBasketButton extends StatelessWidget {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: () async {
-            IDetailProductRepository repository = locator.get();
-            var response = await repository.getProductImage();
-            response.fold((l) {}, (r) {
-              r.forEach((element) {
-                print(element.imageUrl);
-              });
-            });
-          },
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                height: 53,
-                width: 160,
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
-                  ),
+        ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
+              height: 53,
+              width: 160,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
                 ),
-                child: const Center(
-                  child: Text(
-                    'افزودن به سبد خرید',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'SB',
-                    ),
+              ),
+              child: const Center(
+                child: Text(
+                  'افزودن به سبد خرید',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'SB',
                   ),
                 ),
               ),
@@ -817,6 +803,117 @@ class PriceTagButton extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ColorVariantList extends StatefulWidget {
+  List<Variant> variantList;
+  ColorVariantList({super.key, required this.variantList});
+
+  @override
+  State<ColorVariantList> createState() => _ColorVariantListState();
+}
+
+class _ColorVariantListState extends State<ColorVariantList> {
+  List<Widget> colorWidgets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (var colorVariant in widget.variantList) {
+      String hexColor = 'ff${colorVariant.value}';
+      Color itemColor = Color(int.parse(hexColor, radix: 16));
+      var item = Container(
+        height: 26,
+        width: 26,
+        margin: const EdgeInsets.only(left: 10),
+        decoration: BoxDecoration(
+          color: itemColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+        ),
+      );
+      colorWidgets.add(item);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SizedBox(
+        height: 26,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: colorWidgets.length,
+          itemBuilder: (context, index) {
+            return colorWidgets[index];
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class StorageVariantList extends StatefulWidget {
+  List<Variant> storageVariants;
+  StorageVariantList({super.key, required this.storageVariants});
+
+  @override
+  State<StorageVariantList> createState() => _StorageVariantListState();
+}
+
+class _StorageVariantListState extends State<StorageVariantList> {
+  List<Widget> storageWidgetList = [];
+
+  @override
+  void initState() {
+    for (var storageVariant in widget.storageVariants) {
+      var item = Container(
+        height: 25,
+        margin: const EdgeInsets.only(left: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(8),
+          ),
+          border: Border.all(
+            width: 1,
+            color: CustomColors.grey,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            storageVariant.value!,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: 'SB',
+            ),
+          ),
+        ),
+      );
+      storageWidgetList.add(item);
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: SizedBox(
+        height: 26,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: storageWidgetList.length,
+          itemBuilder: (context, index) {
+            return storageWidgetList[index];
+          },
+        ),
+      ),
     );
   }
 }
