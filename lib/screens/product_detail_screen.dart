@@ -27,7 +27,8 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   void initState() {
-    BlocProvider.of<ProductBloc>(context).add(ProductInitializEvent());
+    BlocProvider.of<ProductBloc>(context).add(
+        ProductInitializEvent(widget.product.id, widget.product.categoryId));
     super.initState();
   }
 
@@ -51,52 +52,58 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
                 ],
-                SliverToBoxAdapter(
-                  child: Container(
-                    width: double.infinity,
-                    height: 60,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 12),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
+                if (state is ProductResponseState) ...{
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 12),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
                       ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Image(
-                            image:
-                                AssetImage('assets/images/icon_apple_blue.png'),
-                          ),
-                          Expanded(
-                            child: Text(
-                              'دسته بندی',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'SB',
-                                fontSize: 16,
-                                color: CustomColors.blue,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage(
+                                  'assets/images/icon_apple_blue.png'),
+                            ),
+                            Expanded(
+                              child: Text(
+                                state.productCategoryEither.fold(
+                                  (l) => 'دسته بندی',
+                                  (productCategory) =>
+                                      productCategory.title ?? 'دسته بندی',
+                                ),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'SB',
+                                  fontSize: 16,
+                                  color: CustomColors.blue,
+                                ),
                               ),
                             ),
-                          ),
-                          Image(
-                            image: AssetImage('assets/images/icon_back.png'),
-                          ),
-                        ],
+                            Image(
+                              image: AssetImage('assets/images/icon_back.png'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SliverToBoxAdapter(
+                },
+                SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Text(
-                      ' Se 2022 آیفون',
+                      widget.product.name,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'SB',
                         fontSize: 16,
                         color: Colors.black,
@@ -109,7 +116,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     (errorMessage) =>
                         SliverToBoxAdapter(child: Text(errorMessage)),
                     (productImageList) {
-                      return GalleryWidget(imageList: productImageList);
+                      return GalleryWidget(
+                        imageList: productImageList,
+                        defaultProductThumbnail: widget.product.thumbnail,
+                      );
                     },
                   )
                 ],
@@ -555,7 +565,11 @@ class VariantGeneratorChild extends StatelessWidget {
 
 class GalleryWidget extends StatefulWidget {
   List<ProductImage> imageList;
-  GalleryWidget({super.key, required this.imageList});
+  String? defaultProductThumbnail;
+  GalleryWidget(
+      {super.key,
+      required this.imageList,
+      required this.defaultProductThumbnail});
 
   @override
   State<GalleryWidget> createState() => _GalleryWidgetState();
@@ -598,8 +612,9 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                     SizedBox(
                       height: double.infinity,
                       child: CachedImage(
-                        imageUrl:
-                            widget.imageList[_selectedPoductImage].imageUrl,
+                        imageUrl: (widget.imageList.isEmpty)
+                            ? widget.defaultProductThumbnail
+                            : widget.imageList[_selectedPoductImage].imageUrl,
                       ),
                     ),
                     const Spacer(),
@@ -612,48 +627,54 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 70,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                ),
-                child: ListView.builder(
-                  itemCount: widget.imageList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedPoductImage = index;
-                        });
-                      },
-                      child: Container(
-                        height: 70,
-                        width: 70,
-                        margin: const EdgeInsets.only(left: 20),
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(
-                            width: 1,
-                            color: CustomColors.grey,
+            if (widget.imageList.isNotEmpty) ...{
+              SizedBox(
+                height: 70,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
+                  child: ListView.builder(
+                    itemCount: widget.imageList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedPoductImage = index;
+                          });
+                        },
+                        child: Container(
+                          height: 70,
+                          width: 70,
+                          margin: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                          ),
+                          child: CachedImage(
+                            imageUrl: widget.imageList[index].imageUrl,
+                            radius: 10,
                           ),
                         ),
-                        child: CachedImage(
-                          imageUrl: widget.imageList[index].imageUrl,
-                          radius: 10,
-                        ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            )
+              const SizedBox(
+                height: 20,
+              ),
+            } else ...{
+              SizedBox(
+                height: 50,
+              ),
+            }
           ],
         ),
       ),

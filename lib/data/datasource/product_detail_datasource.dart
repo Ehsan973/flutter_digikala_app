@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product_image.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
@@ -9,20 +10,21 @@ import 'package:digikala_app/util/api_exeption.dart';
 import 'package:dio/dio.dart';
 
 abstract class IDetailProductDatasource {
-  Future<List<ProductImage>> getGallery();
+  Future<List<ProductImage>> getGallery(String productId);
   Future<List<VariantType>> getVariantTypes();
-  Future<List<Variant>> getVariants();
-  Future<List<ProductVariant>> getProductVariant();
+  Future<List<Variant>> getVariants(String productId);
+  Future<List<ProductVariant>> getProductVariant(String productId);
+  Future<Category> getProductCategory(String categoryId);
 }
 
 class DetailProductRemoteDatasource extends IDetailProductDatasource {
   final Dio _dio = locator.get();
 
   @override
-  Future<List<ProductImage>> getGallery() async {
+  Future<List<ProductImage>> getGallery(String productId) async {
     try {
       Map<String, String> qParams = {
-        'filter': 'product_id="0tc0e5ju89x5ogj"',
+        'filter': 'product_id="$productId"',
       };
       var response = await _dio.get(
         'collections/gallery/records',
@@ -54,10 +56,10 @@ class DetailProductRemoteDatasource extends IDetailProductDatasource {
   }
 
   @override
-  Future<List<Variant>> getVariants() async {
+  Future<List<Variant>> getVariants(String productId) async {
     try {
       Map<String, String> qParams = {
-        'filter': 'product_id="0tc0e5ju89x5ogj"',
+        'filter': 'product_id="$productId"',
       };
       var response = await _dio.get(
         'collections/variants/records',
@@ -74,9 +76,9 @@ class DetailProductRemoteDatasource extends IDetailProductDatasource {
   }
 
   @override
-  Future<List<ProductVariant>> getProductVariant() async {
+  Future<List<ProductVariant>> getProductVariant(String productId) async {
     var variantTypeList = await getVariantTypes();
-    var variantList = await getVariants();
+    var variantList = await getVariants(productId);
 
     List<ProductVariant> productVariantList = [];
 
@@ -88,5 +90,19 @@ class DetailProductRemoteDatasource extends IDetailProductDatasource {
     }
 
     return productVariantList;
+  }
+
+  @override
+  Future<Category> getProductCategory(String categoryId) async {
+    try {
+      Map<String, String> qParams = {'filter': 'id="$categoryId"'};
+      var response = await _dio.get('collections/category/records',
+          queryParameters: qParams);
+      return Category.fromMapJson(response.data['items'][0]);
+    } on DioException catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'Unknown Error!');
+    }
   }
 }
