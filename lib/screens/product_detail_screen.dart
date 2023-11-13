@@ -5,6 +5,7 @@ import 'package:digikala_app/bloc/product/product_event.dart';
 import 'package:digikala_app/bloc/product/product_state.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/data/model/product_image.dart';
+import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
@@ -69,7 +70,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           children: [
-                            Image(
+                            const Image(
                               image: AssetImage(
                                   'assets/images/icon_apple_blue.png'),
                             ),
@@ -81,14 +82,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       productCategory.title ?? 'دسته بندی',
                                 ),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'SB',
                                   fontSize: 16,
                                   color: CustomColors.blue,
                                 ),
                               ),
                             ),
-                            Image(
+                            const Image(
                               image: AssetImage('assets/images/icon_back.png'),
                             ),
                           ],
@@ -135,103 +136,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ],
                 // _getStorageOptions(),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 46,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 1,
-                        color: CustomColors.grey,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    child: const Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          children: [
-                            Text(
-                              'مشخصات فنی:',
-                              style: TextStyle(
-                                fontFamily: 'SM',
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              'مشاهده',
-                              style: TextStyle(
-                                fontFamily: 'SB',
-                                color: CustomColors.blue,
-                                fontSize: 12,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image(
-                              image: AssetImage(
-                                  'assets/images/icon_left_categroy.png'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                if (state is ProductResponseState) ...[
+                  state.productPropertiesEither.fold(
+                    (errorMessage) =>
+                        SliverToBoxAdapter(child: Text(errorMessage)),
+                    (productProperties) {
+                      return ProductProperties(
+                        productProperties: productProperties,
+                      );
+                    },
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 46,
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        width: 1,
-                        color: CustomColors.grey,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(15),
-                      ),
-                    ),
-                    child: const Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Row(
-                          children: [
-                            Text(
-                              'توضیحات محصول:',
-                              style: TextStyle(
-                                fontFamily: 'SM',
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              'مشاهده',
-                              style: TextStyle(
-                                fontFamily: 'SB',
-                                color: CustomColors.blue,
-                                fontSize: 12,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image(
-                              image: AssetImage(
-                                  'assets/images/icon_left_categroy.png'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                ],
+                ProductDescription(
+                  productDescription: widget.product.description,
                 ),
                 SliverToBoxAdapter(
                   child: Container(
@@ -504,6 +421,230 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ProductProperties extends StatefulWidget {
+  List<Property> productProperties;
+  ProductProperties({
+    super.key,
+    required this.productProperties,
+  });
+
+  @override
+  State<ProductProperties> createState() => _ProductPropertiesState();
+}
+
+class _ProductPropertiesState extends State<ProductProperties> {
+  bool _isVisible = false;
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isVisible = !_isVisible;
+              });
+            },
+            child: Container(
+              height: 46,
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: CustomColors.grey,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: const Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Text(
+                        'مشخصات فنی:',
+                        style: TextStyle(
+                          fontFamily: 'SM',
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        'مشاهده',
+                        style: TextStyle(
+                          fontFamily: 'SB',
+                          color: CustomColors.blue,
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Image(
+                        image:
+                            AssetImage('assets/images/icon_left_categroy.png'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: _isVisible,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: CustomColors.grey,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.productProperties.length,
+                    itemBuilder: (context, index) {
+                      var property = widget.productProperties[index];
+                      return Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              ' ${property.title!} : ${property.value!}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'sm',
+                                height: 1.8,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProductDescription extends StatefulWidget {
+  String productDescription;
+  ProductDescription({
+    super.key,
+    required this.productDescription,
+  });
+
+  @override
+  State<ProductDescription> createState() => _ProductDescriptionState();
+}
+
+class _ProductDescriptionState extends State<ProductDescription> {
+  bool _isVisible = false;
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isVisible = !_isVisible;
+              });
+            },
+            child: Container(
+              height: 46,
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: CustomColors.grey,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: const Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      Text(
+                        'توضیحات محصول:',
+                        style: TextStyle(
+                          fontFamily: 'SM',
+                        ),
+                      ),
+                      Spacer(),
+                      Text(
+                        'مشاهده',
+                        style: TextStyle(
+                          fontFamily: 'SB',
+                          color: CustomColors.blue,
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Image(
+                        image:
+                            AssetImage('assets/images/icon_left_categroy.png'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: _isVisible,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1,
+                  color: CustomColors.grey,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    widget.productDescription,
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

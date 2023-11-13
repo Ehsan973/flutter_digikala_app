@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:digikala_app/data/datasource/product_detail_datasource.dart';
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product_image.dart';
+import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
@@ -14,6 +15,7 @@ abstract class IDetailProductRepository {
   Future<Either<String, List<ProductVariant>>> getProductVariants(
       String productId);
   Future<Either<String, Category>> getProductCategory(String categoryId);
+  Future<Either<String, List<Property>>> getProperties(String productId);
 }
 
 class DetailProductRepository extends IDetailProductRepository {
@@ -55,6 +57,16 @@ class DetailProductRepository extends IDetailProductRepository {
   Future<Either<String, Category>> getProductCategory(String categoryId) async {
     try {
       var response = await _datasource.getProductCategory(categoryId);
+      return right(response);
+    } on ApiException catch (ex) {
+      return left(ex.message ?? 'خطا محتوای متنی ندارد');
+    }
+  }
+
+  @override
+  Future<Either<String, List<Property>>> getProperties(String productId) async {
+    try {
+      var response = await _datasource.getProperties(productId);
       return right(response);
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطا محتوای متنی ندارد');

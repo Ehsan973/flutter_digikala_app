@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product_image.dart';
+import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
@@ -15,6 +16,7 @@ abstract class IDetailProductDatasource {
   Future<List<Variant>> getVariants(String productId);
   Future<List<ProductVariant>> getProductVariant(String productId);
   Future<Category> getProductCategory(String categoryId);
+  Future<List<Property>> getProperties(String productId);
 }
 
 class DetailProductRemoteDatasource extends IDetailProductDatasource {
@@ -99,6 +101,24 @@ class DetailProductRemoteDatasource extends IDetailProductDatasource {
       var response = await _dio.get('collections/category/records',
           queryParameters: qParams);
       return Category.fromMapJson(response.data['items'][0]);
+    } on DioException catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'Unknown Error!');
+    }
+  }
+
+  @override
+  Future<List<Property>> getProperties(String productId) async {
+    try {
+      Map<String, String> qParams = {
+        'filter': 'product_id="$productId"',
+      };
+      var response = await _dio.get('collections/properties/records',
+          queryParameters: qParams);
+      return response.data['items']
+          .map<Property>((jsonObject) => Property.fromJson(jsonObject))
+          .toList();
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
     } catch (ex) {
