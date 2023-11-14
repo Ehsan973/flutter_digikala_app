@@ -1,11 +1,18 @@
+import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 
-class ProductListScreen extends StatelessWidget {
-  const ProductListScreen({super.key});
+class ProductListScreen extends StatefulWidget {
+  Category category;
+  ProductListScreen({super.key, required this.category});
 
+  @override
+  State<ProductListScreen> createState() => _ProductListScreenState();
+}
+
+class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,8 +32,8 @@ class ProductListScreen extends StatelessWidget {
                     Radius.circular(15),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
                       Image(
@@ -34,9 +41,9 @@ class ProductListScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          'پرفروش ترین ها',
+                          widget.category.title!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'SB',
                             fontSize: 16,
                             color: CustomColors.blue,
