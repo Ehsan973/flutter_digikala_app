@@ -16,8 +16,13 @@ class CategoryProductRemoteDatasource extends ICatergoryProductDatasource {
       Map<String, String> qParams = {
         'filter': 'category="$categoryId"',
       };
-      var response = await _dio.get('collections/products/records',
-          queryParameters: qParams);
+      Response<dynamic> response;
+      if (categoryId == '78q8w901e6iipuk') {
+        response = await _dio.get('collections/products/records');
+      } else {
+        response = await _dio.get('collections/products/records',
+            queryParameters: qParams);
+      }
       return response.data['items']
           .map<Product>((jsonObject) => Product.fromJson(jsonObject))
           .toList();

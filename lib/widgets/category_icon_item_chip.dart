@@ -1,7 +1,9 @@
+import 'package:digikala_app/bloc/categoryProduct/category_product_bloc.dart';
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/screens/product_list_screen.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryItemChip extends StatelessWidget {
   CategoryItemChip({
@@ -17,7 +19,14 @@ class CategoryItemChip extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProductListScreen()),
+          MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              create: (context) => CategoryProductBloc(),
+              child: ProductListScreen(
+                category: category,
+              ),
+            ),
+          ),
         );
       },
       child: Column(
