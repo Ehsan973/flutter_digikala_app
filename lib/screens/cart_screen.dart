@@ -118,7 +118,7 @@ class CartItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text('data'),
+                        const Text('آیفون 13 پرومکس'),
                         const Text('data'),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -149,9 +149,13 @@ class CartItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const OptionChip(),
-                        const OptionChip(),
-                        const OptionChip(),
+                        OptionChip(title: 'test'),
+                        OptionChip(
+                          title: 'test',
+                        ),
+                        OptionChip(
+                          title: 'test',
+                        ),
                       ],
                     ),
                   ),
@@ -188,12 +192,17 @@ class CartItem extends StatelessWidget {
 }
 
 class OptionChip extends StatelessWidget {
-  const OptionChip({
+  String? color;
+  String title;
+  OptionChip({
     super.key,
+    this.color,
+    required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
+    int hexColor = int.parse('ff${color}', radix: 16);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: CustomColors.grey),
@@ -201,18 +210,25 @@ class OptionChip extends StatelessWidget {
           Radius.circular(10),
         ),
       ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image(
-              image: AssetImage('assets/images/icon_options.png'),
-            ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            Text('data'),
+            if (color != null) ...{
+              Container(
+                width: 4,
+                height: 4,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(hexColor),
+                ),
+              ),
+            },
+            Text(title),
           ],
         ),
       ),
