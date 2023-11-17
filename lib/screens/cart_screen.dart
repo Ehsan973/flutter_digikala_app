@@ -1,4 +1,5 @@
 import 'package:digikala_app/constants/colors.dart';
+import 'package:digikala_app/util/extentions/string_extentions.dart';
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatelessWidget {
@@ -118,8 +119,23 @@ class CartItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text('آیفون 13 پرومکس'),
-                        const Text('data'),
+                        const Text(
+                          'آیفون 13 پرومکس',
+                          style: TextStyle(
+                            fontFamily: 'SB',
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        const Text(
+                          'گارانتی فیلان 18 ماهه',
+                          style: TextStyle(fontFamily: 'SM', fontSize: 12),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -142,20 +158,75 @@ class CartItem extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const Text('تومان'),
+                            const SizedBox(
+                              width: 6,
+                            ),
+                            const Text(
+                              'تومان',
+                              style: TextStyle(fontFamily: 'SM', fontSize: 12),
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
                             const Text(
                               '123456000',
-                              style: TextStyle(fontFamily: 'SM'),
+                              style: TextStyle(
+                                fontFamily: 'SM',
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
-                        OptionChip(title: 'test'),
-                        OptionChip(
-                          title: 'test',
+                        const SizedBox(
+                          height: 12,
                         ),
-                        OptionChip(
-                          title: 'test',
-                        ),
+                        Wrap(
+                          textDirection: TextDirection.rtl,
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: [
+                            OptionChip(
+                              title: 'قرمز',
+                              color: 'FF1212',
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1, color: CustomColors.red),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      'حذف',
+                                      style: TextStyle(
+                                        fontFamily: 'sm',
+                                        fontSize: 12,
+                                        color: CustomColors.red,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Image(
+                                      image: AssetImage(
+                                          'assets/images/icon_trash.png'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -165,7 +236,7 @@ class CartItem extends StatelessWidget {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 6),
             child: Divider(
               indent: 12,
               endIndent: 12,
@@ -178,10 +249,19 @@ class CartItem extends StatelessWidget {
               children: [
                 Text(
                   'تومان',
-                  style: TextStyle(fontFamily: 'SB'),
+                  style: TextStyle(
+                    fontFamily: 'SB',
+                    fontSize: 16,
+                  ),
                 ),
                 SizedBox(width: 5),
-                Text('114,814,080', style: TextStyle(fontFamily: 'SB')),
+                Text(
+                  '114,814,080',
+                  style: TextStyle(
+                    fontFamily: 'SB',
+                    fontSize: 16,
+                  ),
+                ),
               ],
             ),
           ),
@@ -202,7 +282,6 @@ class OptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int hexColor = int.parse('ff${color}', radix: 16);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: CustomColors.grey),
@@ -211,7 +290,7 @@ class OptionChip extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2),
+        padding: const EdgeInsets.only(top: 2, bottom: 2, right: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -220,15 +299,22 @@ class OptionChip extends StatelessWidget {
             ),
             if (color != null) ...{
               Container(
-                width: 4,
-                height: 4,
+                width: 12,
+                height: 12,
+                margin: const EdgeInsets.only(right: 4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(hexColor),
+                  color: color.parseToColor(),
                 ),
               ),
             },
-            Text(title),
+            Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'SM',
+                fontSize: 12,
+              ),
+            ),
           ],
         ),
       ),
