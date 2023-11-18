@@ -1,12 +1,16 @@
 import 'package:digikala_app/constants/colors.dart';
+import 'package:digikala_app/data/model/basket_item.dart';
 import 'package:digikala_app/util/extentions/string_extentions.dart';
+import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box<BasketItem>('CartBox');
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
@@ -53,8 +57,9 @@ class CartScreen extends StatelessWidget {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => const CartItem(),
-                    childCount: 5,
+                    (context, index) =>
+                        CartItem(basketItem: box.values.toList()[index]),
+                    childCount: box.values.length,
                   ),
                 ),
                 const SliverPadding(
@@ -92,8 +97,10 @@ class CartScreen extends StatelessWidget {
 }
 
 class CartItem extends StatelessWidget {
-  const CartItem({
+  BasketItem basketItem;
+  CartItem({
     super.key,
+    required this.basketItem,
   });
 
   @override
@@ -231,7 +238,7 @@ class CartItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Image(image: AssetImage('assets/images/iphone.png')),
+                CachedImage(imageUrl: basketItem.thumbnail),
               ],
             ),
           ),

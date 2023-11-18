@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/bloc/product/product_event.dart';
 import 'package:digikala_app/bloc/product/product_state.dart';
+import 'package:digikala_app/data/model/basket_item.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/data/model/product_image.dart';
 import 'package:digikala_app/data/model/product_property.dart';
@@ -14,6 +15,7 @@ import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../constants/colors.dart';
 
@@ -305,14 +307,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(
+                SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PriceTagButton(),
-                        AddToBasketButton(),
+                        const PriceTagButton(),
+                        AddToBasketButton(
+                          product: widget.product,
+                        ),
                       ],
                     ),
                   ),
@@ -824,7 +829,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 }
 
 class AddToBasketButton extends StatelessWidget {
-  const AddToBasketButton({super.key});
+  Product product;
+  AddToBasketButton({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -845,22 +851,37 @@ class AddToBasketButton extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              height: 53,
-              width: 160,
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
+            child: GestureDetector(
+              onTap: () {
+                var item = BasketItem(
+                  product.id,
+                  product.collectionId,
+                  product.thumbnail,
+                  product.discountPrice,
+                  product.price,
+                  product.name,
+                  product.categoryId,
+                );
+                var box = Hive.box<BasketItem>('CartBox');
+                box.add(item);
+              },
+              child: Container(
+                height: 53,
+                width: 160,
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
                 ),
-              ),
-              child: const Center(
-                child: Text(
-                  'افزودن به سبد خرید',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: 'SB',
+                child: const Center(
+                  child: Text(
+                    'افزودن به سبد خرید',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'SB',
+                    ),
                   ),
                 ),
               ),

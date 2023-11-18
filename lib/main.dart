@@ -6,6 +6,7 @@ import 'package:digikala_app/bloc/category/category_bloc.dart';
 import 'package:digikala_app/bloc/home/home_bloc.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/datasource/authentication_datasource.dart';
+import 'package:digikala_app/data/model/basket_item.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/cart_screen.dart';
@@ -20,12 +21,16 @@ import 'package:digikala_app/widgets/banner_slider.dart';
 import 'package:digikala_app/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await getItInit();
+  await Hive.initFlutter();
+  Hive.registerAdapter(BasketItemAdapter());
+  await Hive.openBox<BasketItem>('CartBox');
   runApp(const MyApp());
 }
 
