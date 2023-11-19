@@ -1,11 +1,16 @@
 import 'package:digikala_app/bloc/product/product_event.dart';
 import 'package:digikala_app/bloc/product/product_state.dart';
+import 'package:digikala_app/data/model/basket_item.dart';
+import 'package:digikala_app/data/model/product.dart';
+import 'package:digikala_app/data/repository/basket_repository.dart';
 import 'package:digikala_app/data/repository/product_detail_repository.dart';
 import 'package:digikala_app/di/di.dart';
+import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final IDetailProductRepository _repository = locator.get();
+  final IBasketRepository _basketRepository = locator.get();
   ProductBloc() : super(ProductInitState()) {
     on<ProductInitializEvent>((event, emit) async {
       emit(ProductLoadingState());
@@ -21,5 +26,22 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             productCategory, productProperties),
       );
     });
+
+    on<ProductAddToBasket>(
+      (event, emit) {
+        Product product = event.product;
+        var basketItem = BasketItem(
+          product.id,
+          product.collectionId,
+          product.thumbnail,
+          product.discountPrice,
+          product.price,
+          product.name,
+          product.categoryId,
+        );
+
+        _basketRepository.addProductToBasket(basketItem);
+      },
+    );
   }
 }

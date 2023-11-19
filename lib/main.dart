@@ -2,6 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
+import 'package:digikala_app/bloc/basket/basket_bloc.dart';
+import 'package:digikala_app/bloc/basket/basket_event.dart';
 import 'package:digikala_app/bloc/category/category_bloc.dart';
 import 'package:digikala_app/bloc/home/home_bloc.dart';
 import 'package:digikala_app/constants/colors.dart';
@@ -211,14 +213,21 @@ class _MyAppState extends State<MyApp> {
   List<Widget> _getScreens() {
     return <Widget>[
       ProfileScreen(),
-      CartScreen(),
+      BlocProvider(
+        create: (context) {
+          var bloc = BasketBloc();
+          bloc.add(BasketFetchFromHiveEvent());
+          return bloc;
+        },
+        child: const CartScreen(),
+      ),
       BlocProvider(
         create: (context) => CategoryBloc(),
-        child: CategoryScreen(),
+        child: const CategoryScreen(),
       ),
       BlocProvider(
         create: (context) => HomeBloc(),
-        child: HomeScreen(),
+        child: const HomeScreen(),
       )
     ];
   }
