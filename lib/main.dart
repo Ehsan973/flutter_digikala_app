@@ -29,10 +29,10 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await getItInit();
   await Hive.initFlutter();
   Hive.registerAdapter(BasketItemAdapter());
   await Hive.openBox<BasketItem>('CartBox');
+  await getItInit();
   runApp(const MyApp());
 }
 
@@ -215,7 +215,7 @@ class _MyAppState extends State<MyApp> {
       ProfileScreen(),
       BlocProvider(
         create: (context) {
-          var bloc = BasketBloc();
+          var bloc = locator.get<BasketBloc>();
           bloc.add(BasketFetchFromHiveEvent());
           return bloc;
         },

@@ -1,3 +1,4 @@
+import 'package:digikala_app/bloc/basket/basket_bloc.dart';
 import 'package:digikala_app/data/datasource/authentication_datasource.dart';
 import 'package:digikala_app/data/datasource/banner_datasource.dart';
 import 'package:digikala_app/data/datasource/basket_datasource.dart';
@@ -49,4 +50,7 @@ Future<void> getItInit() async {
 
   locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
+
+  // bloc
+  locator.registerSingleton<BasketBloc>(BasketBloc());
 }

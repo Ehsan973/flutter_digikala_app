@@ -1,5 +1,7 @@
+import 'package:digikala_app/bloc/basket/basket_bloc.dart';
 import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/data/model/product.dart';
+import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +22,8 @@ class ProductItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => BlocProvider(
-              create: (context) => ProductBloc(),
+            builder: (context) => BlocProvider<BasketBloc>.value(
+              value: locator.get<BasketBloc>(),
               child: ProductDetailScreen(
                 product: product,
               ),
