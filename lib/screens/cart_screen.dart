@@ -77,30 +77,34 @@ class CartScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 32)),
                 ],
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                child: SizedBox(
-                  height: 53,
-                  width: MediaQuery.of(context).size.width,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: CustomColors.green,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+              if (state is BasketDataFetchedState) ...{
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                  child: SizedBox(
+                    height: 53,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.green,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      'ادامه فرآیند خرید',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'SM',
+                      child: Text(
+                        state.basketFinalPrice == 0
+                            ? 'سبد خرید شما خالی می باشد'
+                            : '${state.basketFinalPrice}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'SM',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+              },
             ],
           );
         }),
@@ -140,9 +144,10 @@ class CartItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Text(
-                          'آیفون 13 پرومکس',
-                          style: TextStyle(
+                        Text(
+                          basketItem.name,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
                             fontFamily: 'SB',
                             fontSize: 16,
                           ),
@@ -266,22 +271,22 @@ class CartItem extends StatelessWidget {
               endIndent: 12,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'تومان',
                   style: TextStyle(
                     fontFamily: 'SB',
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
-                  '114,814,080',
-                  style: TextStyle(
+                  '${basketItem.realPrice}',
+                  style: const TextStyle(
                     fontFamily: 'SB',
                     fontSize: 16,
                   ),
