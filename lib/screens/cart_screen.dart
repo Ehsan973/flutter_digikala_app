@@ -7,9 +7,29 @@ import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zarinpal/zarinpal.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  PaymentRequest _paymentRequest = PaymentRequest();
+
+  @override
+  void initState() {
+    super.initState();
+    _paymentRequest.setIsSandBox(true);
+    _paymentRequest.setAmount(1000);
+    _paymentRequest.setDescription('This is for test Application Apple shop');
+    _paymentRequest.setMerchantID(
+        'd645fba8-1b29-11ea-be59-000c295eb8fc'); //Your merchant ID
+    _paymentRequest.setCallbackURL('expertflutter://shop');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +105,17 @@ class CartScreen extends StatelessWidget {
                     height: 53,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ZarinPal().startPayment(_paymentRequest,
+                            (status, paymentGatewayUri) {
+                          if (status == 100) {
+                            launchUrl(
+                              Uri.parse(paymentGatewayUri!),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors.green,
                         shape: const RoundedRectangleBorder(
@@ -98,6 +128,7 @@ class CartScreen extends StatelessWidget {
                             : '${state.basketFinalPrice}',
                         style: const TextStyle(
                           fontSize: 18,
+                          color: Colors.white,
                           fontFamily: 'SM',
                         ),
                       ),
