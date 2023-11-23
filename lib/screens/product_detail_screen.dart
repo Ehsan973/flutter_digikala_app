@@ -821,7 +821,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                 height: 20,
               ),
             } else ...{
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
             }
@@ -870,12 +870,14 @@ class AddToBasketButton extends StatelessWidget {
                   ),
                 ),
                 child: const Center(
-                  child: Text(
-                    'افزودن به سبد خرید',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'SB',
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Text(
+                      'افزودن به سبد خرید',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'SB',
+                      ),
                     ),
                   ),
                 ),
@@ -940,17 +942,19 @@ class PriceTagButton extends StatelessWidget {
                           '423535000',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 10,
                             fontFamily: 'SM',
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
-                        Text(
-                          '324000000',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'SM',
-                            fontSize: 16,
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            '324000000',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'SM',
+                            ),
                           ),
                         ),
                       ],
@@ -968,7 +972,7 @@ class PriceTagButton extends StatelessWidget {
                           '%3',
                           style: TextStyle(
                             fontFamily: 'SB',
-                            fontSize: 12,
+                            fontSize: 10,
                             color: Colors.white,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:digikala_app/bloc/basket/basket_bloc.dart';
+import 'package:digikala_app/bloc/basket/basket_event.dart';
 import 'package:digikala_app/bloc/basket/basket_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/model/basket_item.dart';
@@ -7,8 +8,6 @@ import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:zarinpal/zarinpal.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -18,22 +17,13 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  PaymentRequest _paymentRequest = PaymentRequest();
-
   @override
   void initState() {
     super.initState();
-    _paymentRequest.setIsSandBox(true);
-    _paymentRequest.setAmount(1000);
-    _paymentRequest.setDescription('This is for test Application Apple shop');
-    _paymentRequest.setMerchantID(
-        'd645fba8-1b29-11ea-be59-000c295eb8fc'); //Your merchant ID
-    _paymentRequest.setCallbackURL('expertflutter://shop');
   }
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box<BasketItem>('CartBox');
     return Scaffold(
       backgroundColor: CustomColors.backgroundScreenColor,
       body: SafeArea(
@@ -106,15 +96,13 @@ class _CartScreenState extends State<CartScreen> {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        ZarinPal().startPayment(_paymentRequest,
-                            (status, paymentGatewayUri) {
-                          if (status == 100) {
-                            launchUrl(
-                              Uri.parse(paymentGatewayUri!),
-                              mode: LaunchMode.externalApplication,
-                            );
-                          }
-                        });
+                        context
+                            .read<BasketBloc>()
+                            .add(BasketPaymentInitEvent());
+
+                        context
+                            .read<BasketBloc>()
+                            .add(BasketPaymentRequestEvent());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors.green,
@@ -154,7 +142,7 @@ class CartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 249,
+      height: MediaQuery.sizeOf(context).height / 100 * 31,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
       padding: const EdgeInsets.all(10),
@@ -168,7 +156,7 @@ class CartItem extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  flex: 7,
+                  flex: 8,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
@@ -180,7 +168,7 @@ class CartItem extends StatelessWidget {
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             fontFamily: 'SB',
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                         ),
                         const SizedBox(
@@ -188,7 +176,7 @@ class CartItem extends StatelessWidget {
                         ),
                         const Text(
                           'گارانتی فیلان 18 ماهه',
-                          style: TextStyle(fontFamily: 'SM', fontSize: 12),
+                          style: TextStyle(fontFamily: 'SM', fontSize: 10),
                         ),
                         const SizedBox(
                           height: 4,
@@ -380,4 +368,27 @@ class OptionChip extends StatelessWidget {
       ),
     );
   }
+}
+
+String? _extractValueFromQuery(String url, String key) {
+  int queryStartIndex = url.indexOf('?');
+  if (queryStartIndex == -1) return null;
+
+  String query = url.substring(queryStartIndex + 1);
+
+  List<String> pairs = query.split('&');
+
+  for (String pair in pairs) {
+    List<String> keyValue = pair.split('=');
+    if (keyValue.length == 2) {
+      String currentKey = keyValue[0];
+      String value = keyValue[1];
+
+      if (currentKey == key) {
+        return Uri.decodeComponent(value);
+      }
+    }
+  }
+
+  return null;
 }
