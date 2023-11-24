@@ -7,20 +7,9 @@ import 'package:digikala_app/util/extentions/string_extentions.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +122,8 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class CartItem extends StatelessWidget {
-  BasketItem basketItem;
-  CartItem({
+  final BasketItem basketItem;
+  const CartItem({
     super.key,
     required this.basketItem,
   });
@@ -230,7 +219,7 @@ class CartItem extends StatelessWidget {
                           spacing: 8,
                           runSpacing: 4,
                           children: [
-                            OptionChip(
+                            const OptionChip(
                               title: 'قرمز',
                               color: 'FF1212',
                             ),
@@ -320,9 +309,9 @@ class CartItem extends StatelessWidget {
 }
 
 class OptionChip extends StatelessWidget {
-  String? color;
-  String title;
-  OptionChip({
+  final String? color;
+  final String title;
+  const OptionChip({
     super.key,
     this.color,
     required this.title,
@@ -368,27 +357,4 @@ class OptionChip extends StatelessWidget {
       ),
     );
   }
-}
-
-String? _extractValueFromQuery(String url, String key) {
-  int queryStartIndex = url.indexOf('?');
-  if (queryStartIndex == -1) return null;
-
-  String query = url.substring(queryStartIndex + 1);
-
-  List<String> pairs = query.split('&');
-
-  for (String pair in pairs) {
-    List<String> keyValue = pair.split('=');
-    if (keyValue.length == 2) {
-      String currentKey = keyValue[0];
-      String value = keyValue[1];
-
-      if (currentKey == key) {
-        return Uri.decodeComponent(value);
-      }
-    }
-  }
-
-  return null;
 }

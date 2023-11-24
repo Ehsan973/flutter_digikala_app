@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryItemChip extends StatelessWidget {
-  CategoryItemChip({
+  const CategoryItemChip({
     super.key,
     required this.category,
   });
-  Category category;
+  final Category category;
 
   @override
   Widget build(BuildContext context) {

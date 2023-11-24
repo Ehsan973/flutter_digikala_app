@@ -1,4 +1,3 @@
-import 'package:digikala_app/widgets/category_icon_item_chip.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';

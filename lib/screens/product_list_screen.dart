@@ -9,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/colors.dart';
 
 class ProductListScreen extends StatefulWidget {
-  Category category;
-  ProductListScreen({super.key, required this.category});
+  final Category category;
+  const ProductListScreen({super.key, required this.category});
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();

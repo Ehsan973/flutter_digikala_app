@@ -3,7 +3,6 @@ import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product_image.dart';
 import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
-import 'package:digikala_app/data/model/variant_type.dart';
 
 abstract class ProductState {}
 

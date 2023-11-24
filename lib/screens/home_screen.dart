@@ -3,8 +3,6 @@ import 'package:digikala_app/bloc/home/home_state.dart';
 import 'package:digikala_app/data/model/banner.dart';
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product.dart';
-import 'package:digikala_app/data/repository/banner_repository.dart';
-import 'package:digikala_app/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -241,11 +239,11 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class CategoryList extends StatelessWidget {
-  CategoryList({
+  const CategoryList({
     super.key,
     required this.categoryList,
   });
-  List<Category> categoryList;
+  final List<Category> categoryList;
   @override
   Widget build(BuildContext context) {
     return Directionality(

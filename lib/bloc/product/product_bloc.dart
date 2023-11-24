@@ -5,7 +5,6 @@ import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/data/repository/basket_repository.dart';
 import 'package:digikala_app/data/repository/product_detail_repository.dart';
 import 'package:digikala_app/di/di.dart';
-import 'package:digikala_app/screens/product_detail_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {

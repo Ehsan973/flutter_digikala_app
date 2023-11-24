@@ -1,5 +1,4 @@
 import 'package:digikala_app/bloc/basket/basket_bloc.dart';
-import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
@@ -10,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../constants/colors.dart';
 
 class ProductItem extends StatelessWidget {
-  Product product;
-  ProductItem({
+  final Product product;
+  const ProductItem({
     super.key,
     required this.product,
   });

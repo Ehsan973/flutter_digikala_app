@@ -144,7 +144,7 @@ class LoginScreen extends StatelessWidget {
                         } else if (state is AuthLoadingState) {
                           return const CircularProgressIndicator();
                         } else if (state is AuthResponseState) {
-                          var widget = Text('');
+                          var widget = const Text('');
                           state.response.fold(
                             (l) {
                               widget = Text(l);
@@ -157,7 +157,7 @@ class LoginScreen extends StatelessWidget {
                           return widget;
                         }
 
-                        return Text('خطای نا مشخص');
+                        return const Text('خطای نا مشخص');
                       },
                     ),
                   ],

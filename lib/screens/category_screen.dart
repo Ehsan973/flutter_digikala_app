@@ -3,7 +3,6 @@ import 'package:digikala_app/bloc/category/category_event.dart';
 import 'package:digikala_app/bloc/category/category_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/model/category.dart';
-import 'package:digikala_app/data/repository/category_repository.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,8 +88,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
 }
 
 class CategoryList extends StatelessWidget {
-  List<Category>? categoryList;
-  CategoryList({
+  final List<Category>? categoryList;
+  const CategoryList({
     super.key,
     required this.categoryList,
   });

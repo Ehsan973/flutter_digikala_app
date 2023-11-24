@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product_image.dart';
 import 'package:digikala_app/data/model/product_property.dart';

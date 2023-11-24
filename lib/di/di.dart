@@ -13,6 +13,8 @@ import 'package:digikala_app/data/repository/category_product_repository.dart';
 import 'package:digikala_app/data/repository/category_repository.dart';
 import 'package:digikala_app/data/repository/product_detail_repository.dart';
 import 'package:digikala_app/data/repository/product_repository.dart';
+import 'package:digikala_app/util/payment_handler.dart';
+import 'package:digikala_app/util/url_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,11 +22,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 var locator = GetIt.I;
 
 Future<void> getItInit() async {
+  await _initComponents();
+
+  //dataSources
+  _initDatasources();
+
+  //repositories
+  _initRepositories();
+
+  // bloc
+  locator
+      .registerSingleton<BasketBloc>(BasketBloc(locator.get(), locator.get()));
+}
+
+Future<void> _initComponents() async {
+  locator.registerSingleton<UrlHandler>(UrlLauncher());
+  locator
+      .registerSingleton<PaymentHandler>(ZarinpalPaymentHandler(locator.get()));
   locator.registerSingleton<Dio>(
     Dio(BaseOptions(baseUrl: 'http://startflutter.ir/api/')),
   );
+  locator.registerSingleton<SharedPreferences>(
+      await SharedPreferences.getInstance());
+}
 
-  //dataSources
+void _initDatasources() {
   locator
       .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
   locator
@@ -36,8 +58,9 @@ Future<void> getItInit() async {
   locator.registerFactory<ICatergoryProductDatasource>(
       () => CategoryProductRemoteDatasource());
   locator.registerFactory<IBasketDatasource>(() => BasketLocalDatasouce());
+}
 
-  //repositories
+void _initRepositories() {
   locator.registerFactory<IAuthRepository>(() => AuthenticationRepository());
   locator.registerFactory<ICatergoryRepository>(() => CategoryRepository());
   locator.registerFactory<IBannerRepository>(() => BannerRepository());
@@ -47,10 +70,4 @@ Future<void> getItInit() async {
   locator.registerFactory<ICategoryProductRepository>(
       () => CatergoryProductRepository());
   locator.registerFactory<IBasketRepository>(() => BasketRepository());
-
-  locator.registerSingleton<SharedPreferences>(
-      await SharedPreferences.getInstance());
-
-  // bloc
-  locator.registerSingleton<BasketBloc>(BasketBloc());
 }

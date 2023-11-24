@@ -3,7 +3,6 @@ import 'package:digikala_app/data/datasource/authentication_datasource.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/util/api_exeption.dart';
 import 'package:digikala_app/util/auth_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthRepository {
   Future<Either<String, String>> register(
@@ -14,7 +13,6 @@ abstract class IAuthRepository {
 
 class AuthenticationRepository extends IAuthRepository {
   final IAuthenticationDatasource _datasource = locator.get();
-  final SharedPreferences _sharedPref = locator.get();
 
   @override
   Future<Either<String, String>> register(

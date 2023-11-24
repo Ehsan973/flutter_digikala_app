@@ -5,25 +5,21 @@ import 'package:digikala_app/bloc/basket/basket_event.dart';
 import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/bloc/product/product_event.dart';
 import 'package:digikala_app/bloc/product/product_state.dart';
-import 'package:digikala_app/data/model/basket_item.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/data/model/product_image.dart';
 import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
-import 'package:digikala_app/data/repository/product_detail_repository.dart';
-import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 
 import '../constants/colors.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  ProductDetailScreen({super.key, required this.product});
-  Product product;
+  const ProductDetailScreen({super.key, required this.product});
+  final Product product;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -436,8 +432,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 }
 
 class ProductProperties extends StatefulWidget {
-  List<Property> productProperties;
-  ProductProperties({
+  final List<Property> productProperties;
+  const ProductProperties({
     super.key,
     required this.productProperties,
   });
@@ -557,8 +553,8 @@ class _ProductPropertiesState extends State<ProductProperties> {
 }
 
 class ProductDescription extends StatefulWidget {
-  String productDescription;
-  ProductDescription({
+  final String productDescription;
+  const ProductDescription({
     super.key,
     required this.productDescription,
   });
@@ -660,9 +656,10 @@ class _ProductDescriptionState extends State<ProductDescription> {
 }
 
 class VariantContainerGenerator extends StatelessWidget {
-  List<ProductVariant> productVariantList;
+  final List<ProductVariant> productVariantList;
 
-  VariantContainerGenerator({super.key, required this.productVariantList});
+  const VariantContainerGenerator(
+      {super.key, required this.productVariantList});
 
   @override
   Widget build(BuildContext context) {
@@ -681,8 +678,8 @@ class VariantContainerGenerator extends StatelessWidget {
 }
 
 class VariantGeneratorChild extends StatelessWidget {
-  ProductVariant productVariant;
-  VariantGeneratorChild({super.key, required this.productVariant});
+  final ProductVariant productVariant;
+  const VariantGeneratorChild({super.key, required this.productVariant});
 
   @override
   Widget build(BuildContext context) {
@@ -714,9 +711,9 @@ class VariantGeneratorChild extends StatelessWidget {
 }
 
 class GalleryWidget extends StatefulWidget {
-  List<ProductImage> imageList;
-  String? defaultProductThumbnail;
-  GalleryWidget(
+  final List<ProductImage> imageList;
+  final String? defaultProductThumbnail;
+  const GalleryWidget(
       {super.key,
       required this.imageList,
       required this.defaultProductThumbnail});
@@ -833,8 +830,8 @@ class _GalleryWidgetState extends State<GalleryWidget> {
 }
 
 class AddToBasketButton extends StatelessWidget {
-  Product product;
-  AddToBasketButton({super.key, required this.product});
+  final Product product;
+  const AddToBasketButton({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -990,8 +987,8 @@ class PriceTagButton extends StatelessWidget {
 }
 
 class ColorVariantList extends StatefulWidget {
-  List<Variant> variantList;
-  ColorVariantList({super.key, required this.variantList});
+  final List<Variant> variantList;
+  const ColorVariantList({super.key, required this.variantList});
 
   @override
   State<ColorVariantList> createState() => _ColorVariantListState();
@@ -1049,8 +1046,8 @@ class _ColorVariantListState extends State<ColorVariantList> {
 }
 
 class StorageVariantList extends StatefulWidget {
-  List<Variant> storageVariants;
-  StorageVariantList({super.key, required this.storageVariants});
+  final List<Variant> storageVariants;
+  const StorageVariantList({super.key, required this.storageVariants});
 
   @override
   State<StorageVariantList> createState() => _StorageVariantListState();

@@ -6,9 +6,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../constants/colors.dart';
 
 class BannerSlider extends StatelessWidget {
-  BannerSlider(this.bannerList, {super.key});
+  const BannerSlider(this.bannerList, {super.key});
 
-  List<BannerHome> bannerList;
+  final List<BannerHome> bannerList;
 
   @override
   Widget build(BuildContext context) {
