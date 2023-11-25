@@ -5,6 +5,7 @@ import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 import '../bloc/home/home_bloc.dart';
 import '../constants/colors.dart';
@@ -33,59 +34,69 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            return CustomScrollView(
-              slivers: [
-                if (state is HomeLoadingState) ...[
-                  const SliverToBoxAdapter(child: CircularProgressIndicator())
-                ] else ...{
-                  const SearchBox(),
-                  if (state is HomeRequestSuccessState) ...[
-                    state.bannerEither.fold(
-                      (exceptionMessage) =>
-                          SliverToBoxAdapter(child: Text(exceptionMessage)),
-                      (listBanners) {
-                        return _getBanners(listBanners);
-                      },
-                    ),
-                  ],
-                  _getCategoryListTitle(),
-                  if (state is HomeRequestSuccessState) ...[
-                    state.categoryEither.fold(
-                      (exceptionMessage) =>
-                          SliverToBoxAdapter(child: Text(exceptionMessage)),
-                      (categoryList) => _getCategoryList(categoryList),
-                    ),
-                  ],
-                  _getBestSellerTitle(),
-                  if (state is HomeRequestSuccessState) ...[
-                    state.bestSellerProductEither.fold(
-                      (exceptionMesssage) =>
-                          SliverToBoxAdapter(child: Text(exceptionMesssage)),
-                      (productList) => _getBestSellerProduct(productList),
-                    ),
-                  ],
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 12,
-                    ),
-                  ),
-                  _getMostViewedTitle(),
-                  if (state is HomeRequestSuccessState) ...[
-                    state.hottestProductEither.fold(
-                      (errorMessage) =>
-                          SliverToBoxAdapter(child: Text(errorMessage)),
-                      (productList) {
-                        return _getMostViewedProduct(productList);
-                      },
-                    )
-                  ],
-                },
-              ],
-            );
+            return _getHomeScreenContent(state);
           },
         ),
       ),
     );
+  }
+
+  Widget _getHomeScreenContent(HomeState state) {
+    if (state is HomeLoadingState) {
+      return const Center(
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: Center(
+            child: LoadingIndicator(
+              indicatorType: Indicator.ballRotateChase,
+              colors: [CustomColors.blue],
+            ),
+          ),
+        ),
+      );
+    } else if (state is HomeRequestSuccessState) {
+      return CustomScrollView(
+        slivers: [
+          const SearchBox(),
+          state.bannerEither.fold(
+            (exceptionMessage) =>
+                SliverToBoxAdapter(child: Text(exceptionMessage)),
+            (listBanners) {
+              return _getBanners(listBanners);
+            },
+          ),
+          _getCategoryListTitle(),
+          state.categoryEither.fold(
+            (exceptionMessage) =>
+                SliverToBoxAdapter(child: Text(exceptionMessage)),
+            (categoryList) => _getCategoryList(categoryList),
+          ),
+          _getBestSellerTitle(),
+          state.bestSellerProductEither.fold(
+            (exceptionMesssage) =>
+                SliverToBoxAdapter(child: Text(exceptionMesssage)),
+            (productList) => _getBestSellerProduct(productList),
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 12,
+            ),
+          ),
+          _getMostViewedTitle(),
+          state.hottestProductEither.fold(
+            (errorMessage) => SliverToBoxAdapter(child: Text(errorMessage)),
+            (productList) {
+              return _getMostViewedProduct(productList);
+            },
+          )
+        ],
+      );
+    } else {
+      return const Center(
+        child: Text('خطایی در دریافت اطلاعات بوجود آمده است!'),
+      );
+    }
   }
 
   SliverToBoxAdapter _getMostViewedProduct(List<Product> productList) {
