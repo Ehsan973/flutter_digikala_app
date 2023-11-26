@@ -12,6 +12,7 @@ import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
+import 'package:digikala_app/widgets/loading_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,6 +40,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         backgroundColor: CustomColors.backgroundScreenColor,
         body: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
+            if (state is ProductLoadingState) {
+              return const Center(
+                child: LoadingAnimation(),
+              );
+            }
             return SafeArea(
               child: CustomScrollView(
                 slivers: [
@@ -99,20 +105,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                   },
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text(
-                        widget.product.name,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'SB',
-                          fontSize: 16,
-                          color: Colors.black,
+                  if (state is ProductResponseState) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          widget.product.name,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontFamily: 'SB',
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                   if (state is ProductResponseState) ...[
                     state.productImageEither.fold(
                       (errorMessage) =>
@@ -148,179 +156,190 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       },
                     ),
                   ],
-                  ProductDescription(
-                    productDescription: widget.product.description,
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      height: 46,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          width: 1,
-                          color: CustomColors.grey,
+                  if (state is ProductResponseState) ...[
+                    ProductDescription(
+                      productDescription: widget.product.description,
+                    ),
+                  ],
+                  if (state is ProductResponseState) ...[
+                    SliverToBoxAdapter(
+                      child: Container(
+                        height: 46,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            width: 1,
+                            color: CustomColors.grey,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
                         ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                      ),
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'نظرات کاربران:',
-                                style: TextStyle(
-                                  fontFamily: 'SM',
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Row(
+                              children: [
+                                const Text(
+                                  'نظرات کاربران:',
+                                  style: TextStyle(
+                                    fontFamily: 'SM',
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Positioned(
-                                      right: 0,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.amber,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                          border: Border.all(
-                                            width: 2,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 15,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                          border: Border.all(
-                                            width: 2,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 30,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                          border: Border.all(
-                                            width: 2,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 45,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                          border: Border.all(
-                                            width: 2,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 60,
-                                      child: Container(
-                                        width: 26,
-                                        height: 26,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(8),
-                                          ),
-                                          border: Border.all(
-                                            width: 2,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            '10+',
-                                            style: TextStyle(
-                                              fontFamily: 'SB',
-                                              fontSize: 12,
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.center,
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      Positioned(
+                                        right: 0,
+                                        child: Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                            color: Colors.amber,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                              width: 2,
                                               color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Positioned(
+                                        right: 15,
+                                        child: Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 30,
+                                        child: Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 45,
+                                        child: Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 60,
+                                        child: Container(
+                                          width: 26,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                            border: Border.all(
+                                              width: 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          child: const Center(
+                                            child: Text(
+                                              '10+',
+                                              style: TextStyle(
+                                                fontFamily: 'SB',
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const Spacer(),
-                              const Text(
-                                'مشاهده',
-                                style: TextStyle(
-                                  fontFamily: 'SB',
-                                  color: CustomColors.blue,
-                                  fontSize: 12,
+                                const Spacer(),
+                                const Text(
+                                  'مشاهده',
+                                  style: TextStyle(
+                                    fontFamily: 'SB',
+                                    color: CustomColors.blue,
+                                    fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              const Image(
-                                image: AssetImage(
-                                    'assets/images/icon_left_categroy.png'),
-                              ),
-                            ],
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Image(
+                                  image: AssetImage(
+                                      'assets/images/icon_left_categroy.png'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const PriceTagButton(),
-                          AddToBasketButton(
-                            product: widget.product,
-                          ),
-                        ],
+                  ],
+                  if (state is ProductResponseState) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const PriceTagButton(),
+                            AddToBasketButton(
+                              product: widget.product,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                  ]
                 ],
               ),
             );

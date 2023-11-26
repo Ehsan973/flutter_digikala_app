@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+extension PriceParsing on String{
+  
+}
+
+
 extension ColorParsing on String? {
   Color parseToColor() {
     int hexColor = int.parse('ff$this', radix: 16);

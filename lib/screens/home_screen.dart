@@ -3,6 +3,7 @@ import 'package:digikala_app/bloc/home/home_state.dart';
 import 'package:digikala_app/data/model/banner.dart';
 import 'package:digikala_app/data/model/category.dart';
 import 'package:digikala_app/data/model/product.dart';
+import 'package:digikala_app/widgets/loading_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -13,19 +14,8 @@ import '../widgets/banner_slider.dart';
 import '../widgets/category_icon_item_chip.dart';
 import '../widgets/product_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    BlocProvider.of<HomeBloc>(context).add(HomeGetInitialData());
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,63 +24,59 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            return _getHomeScreenContent(state);
+            return _getHomeScreenContent(state, context);
           },
         ),
       ),
     );
   }
 
-  Widget _getHomeScreenContent(HomeState state) {
+  Widget _getHomeScreenContent(HomeState state, BuildContext context) {
     if (state is HomeLoadingState) {
       return const Center(
-        child: SizedBox(
-          height: 60,
-          width: 60,
-          child: Center(
-            child: LoadingIndicator(
-              indicatorType: Indicator.ballRotateChase,
-              colors: [CustomColors.blue],
-            ),
-          ),
-        ),
+        child: LoadingAnimation(),
       );
     } else if (state is HomeRequestSuccessState) {
-      return CustomScrollView(
-        slivers: [
-          const SearchBox(),
-          state.bannerEither.fold(
-            (exceptionMessage) =>
-                SliverToBoxAdapter(child: Text(exceptionMessage)),
-            (listBanners) {
-              return _getBanners(listBanners);
-            },
-          ),
-          _getCategoryListTitle(),
-          state.categoryEither.fold(
-            (exceptionMessage) =>
-                SliverToBoxAdapter(child: Text(exceptionMessage)),
-            (categoryList) => _getCategoryList(categoryList),
-          ),
-          _getBestSellerTitle(),
-          state.bestSellerProductEither.fold(
-            (exceptionMesssage) =>
-                SliverToBoxAdapter(child: Text(exceptionMesssage)),
-            (productList) => _getBestSellerProduct(productList),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 12,
+      return RefreshIndicator(
+        onRefresh: () async {
+          context.read<HomeBloc>().add(HomeGetInitialData());
+        },
+        child: CustomScrollView(
+          slivers: [
+            const SearchBox(),
+            state.bannerEither.fold(
+              (exceptionMessage) =>
+                  SliverToBoxAdapter(child: Text(exceptionMessage)),
+              (listBanners) {
+                return _getBanners(listBanners);
+              },
             ),
-          ),
-          _getMostViewedTitle(),
-          state.hottestProductEither.fold(
-            (errorMessage) => SliverToBoxAdapter(child: Text(errorMessage)),
-            (productList) {
-              return _getMostViewedProduct(productList);
-            },
-          )
-        ],
+            _getCategoryListTitle(),
+            state.categoryEither.fold(
+              (exceptionMessage) =>
+                  SliverToBoxAdapter(child: Text(exceptionMessage)),
+              (categoryList) => _getCategoryList(categoryList),
+            ),
+            _getBestSellerTitle(),
+            state.bestSellerProductEither.fold(
+              (exceptionMesssage) =>
+                  SliverToBoxAdapter(child: Text(exceptionMesssage)),
+              (productList) => _getBestSellerProduct(productList),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 12,
+              ),
+            ),
+            _getMostViewedTitle(),
+            state.hottestProductEither.fold(
+              (errorMessage) => SliverToBoxAdapter(child: Text(errorMessage)),
+              (productList) {
+                return _getMostViewedProduct(productList);
+              },
+            )
+          ],
+        ),
       );
     } else {
       return const Center(
@@ -248,6 +234,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
 
 class CategoryList extends StatelessWidget {
   const CategoryList({

@@ -2,6 +2,7 @@ import 'package:digikala_app/bloc/basket/basket_bloc.dart';
 import 'package:digikala_app/data/model/product.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/screens/product_detail_screen.dart';
+import 'package:digikala_app/util/extentions/int_extentions.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class ProductItem extends StatelessWidget {
       },
       child: Container(
         height: 216,
-        width: 160,
+        width: 165,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -77,7 +78,7 @@ class ProductItem extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6.0, vertical: 2),
                       child: Text(
-                        '%${product.percent!.round().toString()}',
+                        '%${product.percent!.round()}',
                         style: const TextStyle(
                           fontFamily: 'SB',
                           fontSize: 12,
@@ -138,14 +139,14 @@ class ProductItem extends StatelessWidget {
                               fontSize: 12),
                         ),
                         const SizedBox(
-                          width: 5,
+                          width: 7,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              product.price.toString(),
+                              product.price.convertToPrice(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -154,7 +155,7 @@ class ProductItem extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${product.price + product.discountPrice}',
+                              product.realPrice.convertToPrice(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'SM',

@@ -5,6 +5,8 @@ import 'package:digikala_app/bloc/basket/basket_bloc.dart';
 import 'package:digikala_app/bloc/basket/basket_event.dart';
 import 'package:digikala_app/bloc/category/category_bloc.dart';
 import 'package:digikala_app/bloc/home/home_bloc.dart';
+import 'package:digikala_app/bloc/home/home_event.dart';
+import 'package:digikala_app/bloc/home/home_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/model/basket_item.dart';
 import 'package:digikala_app/di/di.dart';
@@ -216,7 +218,11 @@ class _MyAppState extends State<MyApp> {
         child: const CategoryScreen(),
       ),
       BlocProvider(
-        create: (context) => HomeBloc(),
+        create: (context) {
+          var bloc = HomeBloc();
+          bloc.add(HomeGetInitialData());
+          return bloc;
+        },
         child: const HomeScreen(),
       )
     ];
