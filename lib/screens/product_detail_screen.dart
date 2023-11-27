@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:digikala_app/bloc/basket/basket_bloc.dart';
 import 'package:digikala_app/bloc/basket/basket_event.dart';
+import 'package:digikala_app/bloc/comment/comment_bloc.dart';
 import 'package:digikala_app/bloc/product/product_bloc.dart';
 import 'package:digikala_app/bloc/product/product_event.dart';
 import 'package:digikala_app/bloc/product/product_state.dart';
@@ -11,6 +12,7 @@ import 'package:digikala_app/data/model/product_property.dart';
 import 'package:digikala_app/data/model/product_variant.dart';
 import 'package:digikala_app/data/model/variant.dart';
 import 'package:digikala_app/data/model/variant_type.dart';
+import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:digikala_app/widgets/loading_animation.dart';
 import 'package:flutter/material.dart';
@@ -163,160 +165,187 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ],
                   if (state is ProductResponseState) ...[
                     SliverToBoxAdapter(
-                      child: Container(
-                        height: 46,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            width: 1,
-                            color: CustomColors.grey,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'نظرات کاربران:',
-                                  style: TextStyle(
-                                    fontFamily: 'SM',
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return BlocProvider(
+                                create: (context) {
+                                  var bloc = CommentBloc(locator.get());
+                                  bloc.add(CommentinitializeEvent(
+                                      widget.product.id));
+                                  return bloc;
+                                },
+                                child: DraggableScrollableSheet(
+                                  initialChildSize: 0.5,
+                                  minChildSize: 0.2,
+                                  maxChildSize: 0.7,
+                                  builder: (context, controller) =>
+                                      CommentBottomSheet(
+                                    controller: controller,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Stack(
-                                    alignment: AlignmentDirectional.center,
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Positioned(
-                                        right: 0,
-                                        child: Container(
-                                          width: 26,
-                                          height: 26,
-                                          decoration: BoxDecoration(
-                                            color: Colors.amber,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 15,
-                                        child: Container(
-                                          width: 26,
-                                          height: 26,
-                                          decoration: BoxDecoration(
-                                            color: Colors.green,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 30,
-                                        child: Container(
-                                          width: 26,
-                                          height: 26,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 45,
-                                        child: Container(
-                                          width: 26,
-                                          height: 26,
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 60,
-                                        child: Container(
-                                          width: 26,
-                                          height: 26,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(8),
-                                            ),
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          child: const Center(
-                                            child: Text(
-                                              '10+',
-                                              style: TextStyle(
-                                                fontFamily: 'SB',
-                                                fontSize: 12,
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          height: 46,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              width: 1,
+                              color: CustomColors.grey,
+                            ),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(15),
+                            ),
+                          ),
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'نظرات کاربران:',
+                                    style: TextStyle(
+                                      fontFamily: 'SM',
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Stack(
+                                      alignment: AlignmentDirectional.center,
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        Positioned(
+                                          right: 0,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.amber,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              border: Border.all(
+                                                width: 2,
                                                 color: Colors.white,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Positioned(
+                                          right: 15,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 30,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 45,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 60,
+                                          child: Container(
+                                            width: 26,
+                                            height: 26,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(8),
+                                              ),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            child: const Center(
+                                              child: Text(
+                                                '10+',
+                                                style: TextStyle(
+                                                  fontFamily: 'SB',
+                                                  fontSize: 12,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const Spacer(),
-                                const Text(
-                                  'مشاهده',
-                                  style: TextStyle(
-                                    fontFamily: 'SB',
-                                    color: CustomColors.blue,
-                                    fontSize: 12,
+                                  const Spacer(),
+                                  const Text(
+                                    'مشاهده',
+                                    style: TextStyle(
+                                      fontFamily: 'SB',
+                                      color: CustomColors.blue,
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Image(
-                                  image: AssetImage(
-                                      'assets/images/icon_left_categroy.png'),
-                                ),
-                              ],
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  const Image(
+                                    image: AssetImage(
+                                        'assets/images/icon_left_categroy.png'),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -446,6 +475,53 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CommentBottomSheet extends StatelessWidget {
+  const CommentBottomSheet({
+    super.key,
+    required this.controller,
+  });
+
+  final ScrollController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CommentBloc, CommentState>(
+      builder: (context, state) {
+        return CustomScrollView(
+          controller: controller,
+          slivers: [
+            if (state is CommentLoading) ...{
+              const SliverToBoxAdapter(
+                child: Text('is loading...'),
+              ),
+            },
+            if (state is CommentResponse) ...{
+              state.commentEither.fold(
+                (l) => SliverToBoxAdapter(child: Text(l)),
+                (commentList) {
+                  if (commentList.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Text('نظری برای این محصول ثبت نشده'),
+                    );
+                  }
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return Text(commentList[index].text);
+                      },
+                      childCount: commentList.length,
+                    ),
+                  );
+                },
+              ),
+            }
+          ],
+        );
+      },
     );
   }
 }

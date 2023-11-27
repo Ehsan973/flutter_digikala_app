@@ -13,7 +13,7 @@ class CommentRemoteDatasource extends ICommentDatasource {
   Future<List<Comment>> getComments(String productId) async {
     try {
       Map<String, String> qParams = {
-        'filter': productId,
+        'filter': 'product_id="$productId"',
       };
 
       var response = await _dio.get(

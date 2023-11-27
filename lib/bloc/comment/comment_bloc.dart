@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:digikala_app/data/model/comment.dart';
 import 'package:digikala_app/data/repository/comment_repository.dart';
-import 'package:digikala_app/di/di.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'comment_state.dart';
