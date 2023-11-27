@@ -4,6 +4,7 @@ import 'package:digikala_app/data/datasource/banner_datasource.dart';
 import 'package:digikala_app/data/datasource/basket_datasource.dart';
 import 'package:digikala_app/data/datasource/category_datasource.dart';
 import 'package:digikala_app/data/datasource/category_product_datasource.dart';
+import 'package:digikala_app/data/datasource/comment_datasource.dart';
 import 'package:digikala_app/data/datasource/product_datasource.dart';
 import 'package:digikala_app/data/datasource/product_detail_datasource.dart';
 import 'package:digikala_app/data/repository/authentication_repository.dart';
@@ -11,6 +12,7 @@ import 'package:digikala_app/data/repository/banner_repository.dart';
 import 'package:digikala_app/data/repository/basket_repository.dart';
 import 'package:digikala_app/data/repository/category_product_repository.dart';
 import 'package:digikala_app/data/repository/category_repository.dart';
+import 'package:digikala_app/data/repository/comment_repository.dart';
 import 'package:digikala_app/data/repository/product_detail_repository.dart';
 import 'package:digikala_app/data/repository/product_repository.dart';
 import 'package:digikala_app/util/payment_handler.dart';
@@ -58,6 +60,7 @@ void _initDatasources() {
   locator.registerFactory<ICatergoryProductDatasource>(
       () => CategoryProductRemoteDatasource());
   locator.registerFactory<IBasketDatasource>(() => BasketLocalDatasouce());
+  locator.registerFactory<ICommentDatasource>(() => CommentRemoteDatasource());
 }
 
 void _initRepositories() {
@@ -70,4 +73,5 @@ void _initRepositories() {
   locator.registerFactory<ICategoryProductRepository>(
       () => CatergoryProductRepository());
   locator.registerFactory<IBasketRepository>(() => BasketRepository());
+  locator.registerFactory<ICommentRepository>(() => CommentRepository());
 }
