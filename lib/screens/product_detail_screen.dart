@@ -511,7 +511,57 @@ class CommentBottomSheet extends StatelessWidget {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        return Text(commentList[index].text);
+                        print(commentList[index].userThumbnailUrl);
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            color: Colors.white,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    const SizedBox(
+                                      width: double.infinity,
+                                    ),
+                                    Text(
+                                      commentList[index].username,
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 4,
+                                    ),
+                                    Text(
+                                      commentList[index].text,
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: CachedImage(
+                                  imageUrl:
+                                      (commentList[index].userThumbnailUrl),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       childCount: commentList.length,
                     ),
