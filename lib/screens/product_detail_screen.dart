@@ -496,7 +496,7 @@ class CommentBottomSheet extends StatelessWidget {
           slivers: [
             if (state is CommentLoading) ...{
               const SliverToBoxAdapter(
-                child: Text('is loading...'),
+                child: Text('خطایی در نمایش نظرات بوجود آمده'),
               ),
             },
             if (state is CommentResponse) ...{
@@ -511,7 +511,6 @@ class CommentBottomSheet extends StatelessWidget {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        print(commentList[index].userThumbnailUrl);
                         return Container(
                           padding: const EdgeInsets.all(16),
                           margin: const EdgeInsets.symmetric(
@@ -531,7 +530,9 @@ class CommentBottomSheet extends StatelessWidget {
                                       width: double.infinity,
                                     ),
                                     Text(
-                                      commentList[index].username,
+                                      commentList[index].username.isEmpty
+                                          ? 'کاربر'
+                                          : commentList[index].username,
                                       textAlign: TextAlign.end,
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -554,10 +555,15 @@ class CommentBottomSheet extends StatelessWidget {
                               SizedBox(
                                 height: 40,
                                 width: 40,
-                                child: CachedImage(
-                                  imageUrl:
-                                      (commentList[index].userThumbnailUrl),
-                                ),
+                                child: commentList[index].avatar == ''
+                                    ? const Image(
+                                        image: AssetImage(
+                                            'assets/images/avatar.png'),
+                                      )
+                                    : CachedImage(
+                                        imageUrl: (commentList[index]
+                                            .userThumbnailUrl),
+                                      ),
                               ),
                             ],
                           ),

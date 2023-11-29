@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 
 abstract class ICommentDatasource {
   Future<List<Comment>> getComments(String productId);
+  Future<void> postComment(String productId, String comment);
 }
 
 class CommentRemoteDatasource extends ICommentDatasource {
@@ -28,6 +29,21 @@ class CommentRemoteDatasource extends ICommentDatasource {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
     } catch (ex) {
       throw ApiException(0, 'Unknown Error!');
+    }
+  }
+
+  @override
+  Future<void> postComment(String productId, String comment) async {
+    try {
+      final response = await _dio.post('collections/comment/records', data: {
+        'text': comment,
+        'user_id': 'lkg8xc50i07oedn',
+        'product_id': productId,
+      });
+    } on DioException catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'Unknown error!');
     }
   }
 }
