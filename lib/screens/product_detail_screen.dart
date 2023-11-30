@@ -40,6 +40,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       },
       child: Scaffold(
         backgroundColor: CustomColors.backgroundScreenColor,
+        resizeToAvoidBottomInset: true,
         body: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
             if (state is ProductLoadingState) {
@@ -169,6 +170,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
+                            isScrollControlled: true,
+                            isDismissible: true,
+                            useSafeArea: true,
+                            showDragHandle: true,
                             builder: (context) {
                               return BlocProvider(
                                 create: (context) {
@@ -177,14 +182,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       widget.product.id));
                                   return bloc;
                                 },
-                                child: DraggableScrollableSheet(
-                                  initialChildSize: 0.5,
-                                  minChildSize: 0.2,
-                                  maxChildSize: 0.7,
-                                  builder: (context, controller) =>
-                                      CommentBottomSheet(
-                                    controller: controller,
-                                  ),
+                                child: CommentBottomSheet(
+                                  productId: widget.product.id,
                                 ),
                               );
                             },
@@ -480,101 +479,194 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 }
 
 class CommentBottomSheet extends StatelessWidget {
-  const CommentBottomSheet({
+  CommentBottomSheet({
     super.key,
-    required this.controller,
+    required this.productId,
   });
-
-  final ScrollController controller;
+  final String productId;
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
-        return CustomScrollView(
-          controller: controller,
-          slivers: [
-            if (state is CommentLoading) ...{
-              const SliverToBoxAdapter(
-                child: Text('خطایی در نمایش نظرات بوجود آمده'),
-              ),
-            },
-            if (state is CommentResponse) ...{
-              state.commentEither.fold(
-                (l) => SliverToBoxAdapter(child: Text(l)),
-                (commentList) {
-                  if (commentList.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Text('نظری برای این محصول ثبت نشده'),
-                    );
-                  }
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            color: Colors.white,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+        if (state is CommentLoading) {
+          return const Center(
+            child: LoadingAnimation(),
+          );
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  if (state is CommentResponse) ...{
+                    state.commentEither.fold(
+                      (l) => SliverToBoxAdapter(child: Text(l)),
+                      (commentList) {
+                        if (commentList.isEmpty) {
+                          return const SliverToBoxAdapter(
+                            child: Text('نظری برای این محصول ثبت نشده'),
+                          );
+                        }
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return Container(
+                                padding: const EdgeInsets.all(16),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
+                                  color: Colors.white,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const SizedBox(
-                                      width: double.infinity,
-                                    ),
-                                    Text(
-                                      commentList[index].username.isEmpty
-                                          ? 'کاربر'
-                                          : commentList[index].username,
-                                      textAlign: TextAlign.end,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const SizedBox(
+                                            width: double.infinity,
+                                          ),
+                                          Text(
+                                            commentList[index].username.isEmpty
+                                                ? 'کاربر'
+                                                : commentList[index].username,
+                                            textAlign: TextAlign.end,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            commentList[index].text,
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     const SizedBox(
-                                      height: 4,
+                                      width: 16,
                                     ),
-                                    Text(
-                                      commentList[index].text,
-                                      textAlign: TextAlign.end,
+                                    SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: commentList[index].avatar == ''
+                                          ? const Image(
+                                              image: AssetImage(
+                                                  'assets/images/avatar.png'),
+                                            )
+                                          : CachedImage(
+                                              imageUrl: (commentList[index]
+                                                  .userThumbnailUrl),
+                                            ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: commentList[index].avatar == ''
-                                    ? const Image(
-                                        image: AssetImage(
-                                            'assets/images/avatar.png'),
-                                      )
-                                    : CachedImage(
-                                        imageUrl: (commentList[index]
-                                            .userThumbnailUrl),
-                                      ),
-                              ),
-                            ],
+                              );
+                            },
+                            childCount: commentList.length,
                           ),
                         );
                       },
-                      childCount: commentList.length,
                     ),
-                  );
-                },
+                  }
+                ],
               ),
-            }
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: textEditingController,
+                      decoration: const InputDecoration(
+                        labelText: 'نام کاربری',
+                        labelStyle: TextStyle(
+                            fontFamily: 'SM',
+                            fontSize: 16,
+                            color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(color: Colors.black, width: 3),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(color: Colors.blue, width: 3),
+                        ),
+                        floatingLabelStyle: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              color: CustomColors.blue,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(15),
+                              ),
+                            ),
+                          ),
+                          ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (textEditingController.text.isEmpty) {
+                                    return;
+                                  }
+
+                                  context.read<CommentBloc>().add(
+                                      CommentPostEvent(productId,
+                                          textEditingController.text));
+
+                                  textEditingController.text = '';
+                                },
+                                child: Container(
+                                  height: 53,
+                                  decoration: const BoxDecoration(
+                                    color: Color.fromARGB(0, 5, 4, 4),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: const Center(
+                                    child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Text(
+                                        'افزودن نظر به محصول',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'SB',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         );
       },

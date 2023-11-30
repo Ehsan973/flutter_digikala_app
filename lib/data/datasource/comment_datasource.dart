@@ -40,6 +40,7 @@ class CommentRemoteDatasource extends ICommentDatasource {
         'user_id': 'lkg8xc50i07oedn',
         'product_id': productId,
       });
+      print(response.data);
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
     } catch (ex) {
