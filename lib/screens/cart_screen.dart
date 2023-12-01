@@ -3,6 +3,7 @@ import 'package:digikala_app/bloc/basket/basket_event.dart';
 import 'package:digikala_app/bloc/basket/basket_state.dart';
 import 'package:digikala_app/constants/colors.dart';
 import 'package:digikala_app/data/model/basket_item.dart';
+import 'package:digikala_app/util/extentions/int_extentions.dart';
 import 'package:digikala_app/util/extentions/string_extentions.dart';
 import 'package:digikala_app/widgets/cached_image.dart';
 import 'package:flutter/material.dart';
@@ -64,8 +65,10 @@ class CartScreen extends StatelessWidget {
                       (basketItemList) {
                         return SliverList(
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) =>
-                                CartItem(basketItem: basketItemList[index]),
+                            (context, index) => CartItem(
+                              basketItem: basketItemList[index],
+                              index: index,
+                            ),
                             childCount: basketItemList.length,
                           ),
                         );
@@ -102,11 +105,11 @@ class CartScreen extends StatelessWidget {
                       child: Text(
                         state.basketFinalPrice == 0
                             ? 'سبد خرید شما خالی می باشد'
-                            : '${state.basketFinalPrice}',
+                            : '${state.basketFinalPrice.convertToPrice()} : پرداخت مبلغ',
                         style: const TextStyle(
                           fontSize: 18,
                           color: Colors.white,
-                          fontFamily: 'SM',
+                          fontFamily: 'SB',
                         ),
                       ),
                     ),
@@ -123,8 +126,10 @@ class CartScreen extends StatelessWidget {
 
 class CartItem extends StatelessWidget {
   final BasketItem basketItem;
+  final int index;
   const CartItem({
     super.key,
+    required this.index,
     required this.basketItem,
   });
 
@@ -179,12 +184,12 @@ class CartItem extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 6.0, vertical: 2),
                                 child: Text(
-                                  '%3',
-                                  style: TextStyle(
+                                  '%${basketItem.percent!.round()}',
+                                  style: const TextStyle(
                                     fontFamily: 'SB',
                                     fontSize: 12,
                                     color: Colors.white,
@@ -202,9 +207,9 @@ class CartItem extends StatelessWidget {
                             const SizedBox(
                               width: 2,
                             ),
-                            const Text(
-                              '123456000',
-                              style: TextStyle(
+                            Text(
+                              basketItem.price.convertToPrice(),
+                              style: const TextStyle(
                                 fontFamily: 'SM',
                                 fontSize: 12,
                               ),
@@ -223,39 +228,46 @@ class CartItem extends StatelessWidget {
                               title: 'قرمز',
                               color: 'FF1212',
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1, color: CustomColors.red),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
+                            GestureDetector(
+                              onTap: () {
+                                context
+                                    .read<BasketBloc>()
+                                    .add(BasketRemoveProductEvent(index));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: CustomColors.red),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 2),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      'حذف',
-                                      style: TextStyle(
-                                        fontFamily: 'sm',
-                                        fontSize: 12,
-                                        color: CustomColors.red,
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        width: 4,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/images/icon_trash.png'),
-                                    ),
-                                  ],
+                                      Text(
+                                        'حذف',
+                                        style: TextStyle(
+                                          fontFamily: 'sm',
+                                          fontSize: 12,
+                                          color: CustomColors.red,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Image(
+                                        image: AssetImage(
+                                            'assets/images/icon_trash.png'),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -293,7 +305,7 @@ class CartItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 5),
                 Text(
-                  '${basketItem.realPrice}',
+                  basketItem.realPrice.convertToPrice(),
                   style: const TextStyle(
                     fontFamily: 'SB',
                     fontSize: 16,

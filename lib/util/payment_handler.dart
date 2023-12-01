@@ -4,7 +4,7 @@ import 'package:uni_links/uni_links.dart';
 import 'package:zarinpal/zarinpal.dart';
 
 abstract class PaymentHandler {
-  Future<void> initPaymentRequest();
+  Future<void> initPaymentRequest(int finalPrice);
   Future<void> sendPaymentRequest();
   Future<void> verifyPaymentRequest();
 }
@@ -18,9 +18,9 @@ class ZarinpalPaymentHandler extends PaymentHandler {
   ZarinpalPaymentHandler(this._urlHandler);
 
   @override
-  Future<void> initPaymentRequest() async {
+  Future<void> initPaymentRequest(int finalPrice) async {
     _paymentRequest.setIsSandBox(true);
-    _paymentRequest.setAmount(1000);
+    _paymentRequest.setAmount(finalPrice);
     _paymentRequest.setDescription('This is for test Application Apple shop');
     _paymentRequest.setMerchantID(
         'd645fba8-1b29-11ea-be59-000c295eb8fc'); //Your merchant ID

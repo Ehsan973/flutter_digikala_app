@@ -17,11 +17,20 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     });
 
     on<BasketPaymentInitEvent>((event, emit) async {
-      _paymentHandler.initPaymentRequest();
+      var basketFinalPrice = await _repository.getBasketFinalPrice();
+
+      _paymentHandler.initPaymentRequest(basketFinalPrice);
     });
 
     on<BasketPaymentRequestEvent>((event, emit) async {
       _paymentHandler.sendPaymentRequest();
+    });
+
+    on<BasketRemoveProductEvent>((event, emit) async {
+      _repository.removeProduct(event.index);
+      var basketItemListEither = await _repository.getAllBasketItems();
+      var basketFinalPrice = await _repository.getBasketFinalPrice();
+      emit(BasketDataFetchedState(basketItemListEither, basketFinalPrice));
     });
   }
 }
