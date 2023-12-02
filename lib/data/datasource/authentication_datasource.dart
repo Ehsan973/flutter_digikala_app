@@ -1,5 +1,6 @@
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/util/api_exeption.dart';
+import 'package:digikala_app/util/dio_provider.dart';
 import 'package:dio/dio.dart';
 
 abstract class IAuthenticationDatasource {
@@ -10,7 +11,7 @@ abstract class IAuthenticationDatasource {
 }
 
 class AuthenticationRemote implements IAuthenticationDatasource {
-  final Dio _dio = locator.get();
+  final Dio _dio = DioProvider.createDioWithoutHeader();
 
   @override
   Future<void> register(

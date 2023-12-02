@@ -1,4 +1,8 @@
+import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
+import 'package:digikala_app/screens/login_screen.dart';
+import 'package:digikala_app/util/auth_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/colors.dart';
 
@@ -56,6 +60,19 @@ class ProfileScreen extends StatelessWidget {
                 color: CustomColors.grey,
               ),
             ),
+            ElevatedButton(
+                onPressed: () {
+                  AuthManager.logout();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => AuthBloc(),
+                        child: LoginScreen(),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('خروج')),
             // const Padding(
             //   padding: EdgeInsets.symmetric(
             //     horizontal: 20,
