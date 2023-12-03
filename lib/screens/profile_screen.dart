@@ -1,4 +1,7 @@
 import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
+import 'package:digikala_app/bloc/authentication/auth_state.dart';
+import 'package:digikala_app/main.dart';
+import 'package:digikala_app/screens/dashboard_screen.dart';
 import 'package:digikala_app/screens/login_screen.dart';
 import 'package:digikala_app/util/auth_manager.dart';
 import 'package:flutter/material.dart';
@@ -63,10 +66,28 @@ class ProfileScreen extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   AuthManager.logout();
-                  Navigator.of(context).pushReplacement(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => BlocProvider(
-                        create: (context) => AuthBloc(),
+                        create: (context) {
+                          var authBloc = AuthBloc();
+                          authBloc.stream.forEach((state) {
+                            if (state is AuthResponseState) {
+                              state.response.fold(
+                                (l) => null,
+                                (r) {
+                                  globalNavigatorKey.currentState
+                                      ?.pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => DashBoardScreen(),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          });
+                          return authBloc;
+                        },
                         child: LoginScreen(),
                       ),
                     ),
