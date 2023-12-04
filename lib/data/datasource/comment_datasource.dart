@@ -1,6 +1,7 @@
 import 'package:digikala_app/data/model/comment.dart';
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/util/api_exeption.dart';
+import 'package:digikala_app/util/auth_manager.dart';
 import 'package:dio/dio.dart';
 
 abstract class ICommentDatasource {
@@ -10,12 +11,14 @@ abstract class ICommentDatasource {
 
 class CommentRemoteDatasource extends ICommentDatasource {
   final Dio _dio = locator.get();
+  final String userId = AuthManager.getId();
   @override
   Future<List<Comment>> getComments(String productId) async {
     try {
-      Map<String, String> qParams = {
+      Map<String, dynamic> qParams = {
         'filter': 'product_id="$productId"',
-        'expand': 'user_id'
+        'expand': 'user_id',
+        'perPage': 100,
       };
 
       var response = await _dio.get(
@@ -37,7 +40,7 @@ class CommentRemoteDatasource extends ICommentDatasource {
     try {
       final response = await _dio.post('collections/comment/records', data: {
         'text': comment,
-        'user_id': 'lkg8xc50i07oedn',
+        'user_id': userId,
         'product_id': productId,
       });
       print(response.data);

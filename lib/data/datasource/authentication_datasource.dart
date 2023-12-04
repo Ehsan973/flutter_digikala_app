@@ -1,5 +1,6 @@
 import 'package:digikala_app/di/di.dart';
 import 'package:digikala_app/util/api_exeption.dart';
+import 'package:digikala_app/util/auth_manager.dart';
 import 'package:digikala_app/util/dio_provider.dart';
 import 'package:dio/dio.dart';
 
@@ -39,7 +40,8 @@ class AuthenticationRemote implements IAuthenticationDatasource {
         'password': password,
       });
       if (response.statusCode == 200) {
-        return response.data['token'];
+        AuthManager.saveId(response.data?['record']['id']);
+        return response.data?['token'];
       }
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
