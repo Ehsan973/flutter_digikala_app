@@ -2,17 +2,15 @@ import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
 import 'package:digikala_app/bloc/authentication/auth_event.dart';
 import 'package:digikala_app/bloc/authentication/auth_state.dart';
 import 'package:digikala_app/constants/colors.dart';
-import 'package:digikala_app/main.dart';
-import 'package:digikala_app/screens/dashboard_screen.dart';
-import 'package:digikala_app/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  RegisterScreen({super.key});
 
   final _usernameTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final _passwordConfirmTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +117,37 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 18),
+                    TextField(
+                      controller: _passwordConfirmTextController,
+                      decoration: const InputDecoration(
+                        labelText: 'تکرار رمز عبور',
+                        labelStyle: TextStyle(
+                          fontFamily: 'SM',
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 2,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide:
+                              BorderSide(color: CustomColors.blue, width: 3),
+                        ),
+                        floatingLabelStyle: TextStyle(
+                          color: CustomColors.blue,
+                          fontSize: 18,
+                          fontFamily: 'SB',
+                        ),
+                      ),
+                    ),
                     const Spacer(),
                     BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
@@ -127,8 +156,12 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () {
                               var username = _usernameTextController.text;
                               var password = _passwordTextController.text;
-                              BlocProvider.of<AuthBloc>(context)
-                                  .add(AuthLoginRequest(username, password));
+                              var passwordConfirm =
+                                  _passwordConfirmTextController.text;
+                              BlocProvider.of<AuthBloc>(context).add(
+                                AuthRegisterRequest(
+                                    username, password, passwordConfirm),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(
@@ -142,7 +175,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            child: const Text('ورود به حساب کاربری'),
+                            child: const Text('ثبت نام'),
                           );
                         } else if (state is AuthLoadingState) {
                           return const CircularProgressIndicator();
@@ -162,41 +195,6 @@ class LoginScreen extends StatelessWidget {
 
                         return const Text('خطای نا مشخص');
                       },
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) {
-                                var bloc = AuthBloc();
-                                bloc.stream.forEach((state) {
-                                  if (state is AuthResponseState) {
-                                    state.response.fold(
-                                      (l) => null,
-                                      (r) {
-                                        globalNavigatorKey.currentState
-                                            ?.pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                DashBoardScreen(),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }
-                                });
-                                return bloc;
-                              },
-                              child: RegisterScreen(),
-                            ),
-                          ),
-                        );
-                      },
-                      child: const Text('اگر حساب کاربری ندارید، ثبت نام کنید'),
                     ),
                   ],
                 ),

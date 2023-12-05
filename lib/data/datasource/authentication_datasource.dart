@@ -23,7 +23,10 @@ class AuthenticationRemote implements IAuthenticationDatasource {
         'password': password,
         'passwordConfirm': passwordConfirm,
       });
-      print('${response.statusCode}');
+      if (response.statusCode == 200) {
+        AuthManager.saveId(response.data?['id']);
+      }
+      // print('${response.statusCode}');
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
     } catch (ex) {
