@@ -34,10 +34,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       navigatorKey: globalNavigatorKey,
       home: AuthManager.readAuth().isEmpty
-          ? BlocProvider(
-              create: (context) => AuthBloc(),
-              child: LoginScreen(),
-            )
+          ? LoginScreen()
           : const DashBoardScreen(),
     );
   }

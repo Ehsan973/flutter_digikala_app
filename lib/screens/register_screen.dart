@@ -2,6 +2,7 @@ import 'package:digikala_app/bloc/authentication/auth_bloc.dart';
 import 'package:digikala_app/bloc/authentication/auth_event.dart';
 import 'package:digikala_app/bloc/authentication/auth_state.dart';
 import 'package:digikala_app/constants/colors.dart';
+import 'package:digikala_app/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +12,29 @@ class RegisterScreen extends StatelessWidget {
   final _usernameTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _passwordConfirmTextController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewContainer(
+        usernameTextController: _usernameTextController,
+        passwordTextController: _passwordTextController,
+        passwordConfirmTextController: _passwordConfirmTextController);
+  }
+}
+
+class ViewContainer extends StatelessWidget {
+  const ViewContainer({
+    super.key,
+    required TextEditingController usernameTextController,
+    required TextEditingController passwordTextController,
+    required TextEditingController passwordConfirmTextController,
+  })  : _usernameTextController = usernameTextController,
+        _passwordTextController = passwordTextController,
+        _passwordConfirmTextController = passwordConfirmTextController;
+
+  final TextEditingController _usernameTextController;
+  final TextEditingController _passwordTextController;
+  final TextEditingController _passwordConfirmTextController;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +147,18 @@ class RegisterScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            BlocBuilder<AuthBloc, AuthState>(
+            BlocConsumer<AuthBloc, AuthState>(
+              listener: ((context, state) {
+                if (state is AuthResponseState) {
+                  state.response.fold((l) {}, (r) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const DashBoardScreen(),
+                      ),
+                    );
+                  });
+                }
+              }),
               builder: (context, state) {
                 if (state is AuthInitialState) {
                   return ElevatedButton(

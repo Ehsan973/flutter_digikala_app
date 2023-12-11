@@ -16,6 +16,28 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: ViewContainer(
+          usernameTextController: _usernameTextController,
+          passwordTextController: _passwordTextController),
+    );
+  }
+}
+
+class ViewContainer extends StatelessWidget {
+  const ViewContainer({
+    super.key,
+    required TextEditingController usernameTextController,
+    required TextEditingController passwordTextController,
+  })  : _usernameTextController = usernameTextController,
+        _passwordTextController = passwordTextController;
+
+  final TextEditingController _usernameTextController;
+  final TextEditingController _passwordTextController;
+
+  @override
+  Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -92,7 +114,23 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              BlocBuilder<AuthBloc, AuthState>(
+              BlocConsumer<AuthBloc, AuthState>(
+                listener: ((context, state) {
+                  //logic
+                  //toast //snack //dialog //navigate
+                  if (state is AuthResponseState) {
+                    state.response.fold(
+                      (l) {},
+                      (r) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const DashBoardScreen(),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                }),
                 builder: (context, state) {
                   if (state is AuthInitialState) {
                     return ElevatedButton(
@@ -142,29 +180,7 @@ class LoginScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                        create: (context) {
-                          var bloc = AuthBloc();
-                          bloc.stream.forEach((state) {
-                            if (state is AuthResponseState) {
-                              state.response.fold(
-                                (l) => null,
-                                (r) {
-                                  globalNavigatorKey.currentState
-                                      ?.pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DashBoardScreen(),
-                                    ),
-                                  );
-                                },
-                              );
-                            }
-                          });
-                          return bloc;
-                        },
-                        child: RegisterScreen(),
-                      ),
+                      builder: (context) => RegisterScreen(),
                     ),
                   );
                 },
