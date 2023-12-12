@@ -74,7 +74,8 @@ class HomeScreen extends StatelessWidget {
               (productList) {
                 return _getMostViewedProduct(productList);
               },
-            )
+            ),
+            const SliverPadding(padding: EdgeInsets.symmetric(vertical: 12)),
           ],
         ),
       );
@@ -234,8 +235,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
 
 class CategoryList extends StatelessWidget {
   const CategoryList({

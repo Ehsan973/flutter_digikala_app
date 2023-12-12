@@ -22,13 +22,16 @@ class AuthenticationRemote implements IAuthenticationDatasource {
         'username': username,
         'password': password,
         'passwordConfirm': passwordConfirm,
+        'name': username,
       });
       if (response.statusCode == 200) {
-        AuthManager.saveId(response.data?['id']);
+        login(username, password);
+        // AuthManager.saveId(response.data?['id']);
       }
       // print('${response.statusCode}');
     } on DioException catch (ex) {
-      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message'],
+          response: ex.response);
     } catch (ex) {
       throw ApiException(0, 'Unknown error!');
     }
@@ -44,6 +47,7 @@ class AuthenticationRemote implements IAuthenticationDatasource {
       });
       if (response.statusCode == 200) {
         AuthManager.saveId(response.data?['record']['id']);
+        AuthManager.saveToken(response.data?['token']);
         return response.data?['token'];
       }
     } on DioException catch (ex) {

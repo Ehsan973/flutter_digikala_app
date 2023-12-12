@@ -43,153 +43,158 @@ class ViewContainer extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 60,
-              ),
-              const SizedBox(
-                height: 200,
-                child: Image(
-                  image: AssetImage('assets/images/login_photo.jpg'),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 60,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'نام کاربری',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'sm',
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(color: Colors.grey[300]),
-                      child: TextField(
-                        controller: _usernameTextController,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 200,
+                  child: Image(
+                    image: AssetImage('assets/images/login_photo.jpg'),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'رمز عبور',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'sm',
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(color: Colors.grey[300]),
-                      child: TextField(
-                        controller: _passwordTextController,
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              BlocConsumer<AuthBloc, AuthState>(
-                listener: ((context, state) {
-                  //logic
-                  //toast //snack //dialog //navigate
-                  if (state is AuthResponseState) {
-                    state.response.fold(
-                      (l) {},
-                      (r) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => const DashBoardScreen(),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                }),
-                builder: (context, state) {
-                  if (state is AuthInitialState) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        var username = _usernameTextController.text;
-                        var password = _passwordTextController.text;
-                        BlocProvider.of<AuthBloc>(context)
-                            .add(AuthLoginRequest(username, password));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[700],
-                        minimumSize: const Size(250, 48),
-                        shape: const RoundedRectangleBorder(),
-                      ),
-                      child: const Text(
-                        'ورود به حساب کاربری',
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'نام کاربری',
                         style: TextStyle(
-                          fontFamily: 'SB',
-                          fontSize: 18,
-                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'sm',
+                          fontSize: 16,
                         ),
                       ),
-                    );
-                  } else if (state is AuthLoadingState) {
-                    return const CircularProgressIndicator();
-                  } else if (state is AuthResponseState) {
-                    var widget = const Text('');
-                    state.response.fold(
-                      (l) {
-                        widget = Text(l);
-                      },
-                      (r) {
-                        widget = Text(r);
-                      },
-                    );
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                        child: TextField(
+                          controller: _usernameTextController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'رمز عبور',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'sm',
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(color: Colors.grey[300]),
+                        child: TextField(
+                          controller: _passwordTextController,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // const Spacer(),
+                const SizedBox(
+                  height: 120,
+                ),
+                BlocConsumer<AuthBloc, AuthState>(
+                  listener: ((context, state) {
+                    //logic
+                    //toast //snack //dialog //navigate
+                    if (state is AuthResponseState) {
+                      state.response.fold(
+                        (l) {},
+                        (r) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const DashBoardScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  }),
+                  builder: (context, state) {
+                    if (state is AuthInitialState) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          var username = _usernameTextController.text;
+                          var password = _passwordTextController.text;
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(AuthLoginRequest(username, password));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[700],
+                          minimumSize: const Size(250, 48),
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        child: const Text(
+                          'ورود به حساب کاربری',
+                          style: TextStyle(
+                            fontFamily: 'SB',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    } else if (state is AuthLoadingState) {
+                      return const CircularProgressIndicator();
+                    } else if (state is AuthResponseState) {
+                      var widget = const Text('');
+                      state.response.fold(
+                        (l) {
+                          widget = Text(l);
+                        },
+                        (r) {
+                          widget = Text(r);
+                        },
+                      );
 
-                    return widget;
-                  }
+                      return widget;
+                    }
 
-                  return const Text('خطای نا مشخص');
-                },
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => RegisterScreen(),
-                    ),
-                  );
-                },
-                child: const Text('اگر حساب کاربری ندارید، ثبت نام کنید'),
-              ),
-              const SizedBox(
-                height: 48,
-              ),
-            ],
+                    return const Text('خطای نا مشخص');
+                  },
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RegisterScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('اگر حساب کاربری ندارید، ثبت نام کنید'),
+                ),
+                const SizedBox(
+                  height: 48,
+                ),
+              ],
+            ),
           ),
         ),
       ),

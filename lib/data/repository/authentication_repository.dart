@@ -30,7 +30,6 @@ class AuthenticationRepository extends IAuthRepository {
     try {
       String token = await _datasource.login(username, password);
       if (token.isNotEmpty) {
-        AuthManager.saveToken(token);
         return right('شما وارد شده اید');
       } else {
         return left('خطایی در ورود پیش آمده است!');
