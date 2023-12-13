@@ -33,10 +33,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: globalNavigatorKey,
-      home:
-          // AuthManager.readAuth().isEmpty
-          // ? LoginScreen():
-          const DashBoardScreen(),
+      home: AuthManager.readAuth().isEmpty
+          ? LoginScreen()
+          : const DashBoardScreen(),
     );
   }
 }
