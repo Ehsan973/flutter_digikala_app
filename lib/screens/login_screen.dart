@@ -124,7 +124,19 @@ class ViewContainer extends StatelessWidget {
                     //toast //snack //dialog //navigate
                     if (state is AuthResponseState) {
                       state.response.fold(
-                        (l) {},
+                        (l) {
+                          _usernameTextController.text = '';
+                          _passwordTextController.text = '';
+                          var snackBar = SnackBar(
+                            content: Text(l),
+                            backgroundColor: Colors.amber,
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(seconds: 3),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(AuthInitialize());
+                        },
                         (r) {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -161,10 +173,30 @@ class ViewContainer extends StatelessWidget {
                     } else if (state is AuthLoadingState) {
                       return const CircularProgressIndicator();
                     } else if (state is AuthResponseState) {
-                      var widget = const Text('');
+                      Widget widget = const Text('');
                       state.response.fold(
                         (l) {
-                          widget = Text(l);
+                          widget = ElevatedButton(
+                            onPressed: () {
+                              var username = _usernameTextController.text;
+                              var password = _passwordTextController.text;
+                              BlocProvider.of<AuthBloc>(context)
+                                  .add(AuthLoginRequest(username, password));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue[700],
+                              minimumSize: const Size(250, 48),
+                              shape: const RoundedRectangleBorder(),
+                            ),
+                            child: const Text(
+                              'ورود به حساب کاربری',
+                              style: TextStyle(
+                                fontFamily: 'SB',
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
                         },
                         (r) {
                           widget = Text(r);

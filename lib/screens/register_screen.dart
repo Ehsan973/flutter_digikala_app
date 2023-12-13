@@ -159,7 +159,19 @@ class ViewContainer extends StatelessWidget {
               BlocConsumer<AuthBloc, AuthState>(
                 listener: ((context, state) {
                   if (state is AuthResponseState) {
-                    state.response.fold((l) {}, (r) {
+                    state.response.fold((l) {
+                      _usernameTextController.text = '';
+                      _passwordTextController.text = '';
+                      _passwordConfirmTextController.text = '';
+                      var snackBar = SnackBar(
+                        content: Text(l),
+                        backgroundColor: Colors.amber,
+                        behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 3),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      BlocProvider.of<AuthBloc>(context).add(AuthInitialize());
+                    }, (r) {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const DashBoardScreen(),
@@ -198,10 +210,34 @@ class ViewContainer extends StatelessWidget {
                   } else if (state is AuthLoadingState) {
                     return const CircularProgressIndicator();
                   } else if (state is AuthResponseState) {
-                    var widget = const Text('');
+                    Widget widget = const Text('');
                     state.response.fold(
                       (l) {
-                        widget = Text(l);
+                        widget = ElevatedButton(
+                          onPressed: () {
+                            var username = _usernameTextController.text;
+                            var password = _passwordTextController.text;
+                            var passwordConfirm =
+                                _passwordConfirmTextController.text;
+                            BlocProvider.of<AuthBloc>(context).add(
+                              AuthRegisterRequest(
+                                  username, password, passwordConfirm),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[700],
+                            minimumSize: const Size(250, 48),
+                            shape: const RoundedRectangleBorder(),
+                          ),
+                          child: const Text(
+                            'ثبت نام',
+                            style: TextStyle(
+                              fontFamily: 'SB',
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
                       },
                       (r) {
                         widget = Text(r);
